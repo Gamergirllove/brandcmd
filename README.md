@@ -51,6 +51,11 @@ that did not exist.
 You need a Supabase project, and Twitch + Google OAuth apps. All three are
 free.
 
+**→ [SETUP.md](SETUP.md) walks through all of it step by step**, including
+the gotchas that will otherwise cost you an afternoon: why migrations 005
+and 006 must run separately, why Twitch's client type must be Confidential,
+and why Google's Testing mode blocks everyone who isn't a listed test user.
+
 ```bash
 git clone https://github.com/Gamergirllove/brandcmd.git
 cd brandcmd
