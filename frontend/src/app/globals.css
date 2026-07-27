@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0A0A0C;
+  --surface: #111115;
+  --surface2: #18181E;
+  --border: #2A2A34;
+  --border2: #363640;
+  --brand: #8B9C3A;
+  --brand-light: #A8BA48;
+  --brand-dim: #4A5420;
+  --brand-glow: rgba(139,156,58,0.12);
+  --text-primary: #E8E8E8;
+  --text-muted: #888896;
+  --text-dim: #555560;
+  --twitch: #9146FF;
+  --youtube: #FF0000;
+  --success: #3DBA6E;
+  --danger: #E04545;
+
+  /* shadcn compat — keep these so UI components don't break */
+  --background: 0 0% 4%;
+  --foreground: 0 0% 91%;
+  --card: 240 5% 7%;
+  --card-foreground: 0 0% 91%;
+  --popover: 240 5% 7%;
+  --popover-foreground: 0 0% 91%;
+  --primary: 72 43% 42%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 240 5% 10%;
+  --secondary-foreground: 0 0% 91%;
+  --muted: 240 5% 12%;
+  --muted-foreground: 240 5% 53%;
+  --accent: 72 43% 20%;
+  --accent-foreground: 72 43% 66%;
+  --destructive: 0 64% 57%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 5% 16%;
+  --input: 240 5% 21%;
+  --ring: 72 43% 42%;
+  --radius: 0.5rem;
+  --sidebar-width: 220px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body {
+    background: #0A0A0C;
+    color: #E8E8E8;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors;
+    background: #8B9C3A;
+    color: #000;
+  }
+  .btn-primary:hover {
+    background: #A8BA48;
+  }
+  .btn-primary:disabled {
+    @apply opacity-60 cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors;
+    border: 1px solid #363640;
+    color: #888896;
+    background: transparent;
+  }
+  .btn-secondary:hover {
+    border-color: #4A5420;
+    color: #E8E8E8;
+  }
+
+  .card {
+    @apply rounded-xl p-4;
+    background: #111115;
+    border: 1px solid #2A2A34;
+  }
+
+  .stat-card {
+    @apply card flex flex-col;
+  }
+
+  .platform-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  .nav-active {
+    background: rgba(74,84,32,0.2);
+    color: #A8BA48;
+    border: 1px solid #4A5420;
+  }
+
+  /* HUD corner brackets for platform cards */
+  .hud-corners {
+    position: relative;
+  }
+  .hud-corners::before,
+  .hud-corners::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: #8B9C3A;
+    border-style: solid;
+    opacity: 0.4;
+  }
+}
+
+/* Thin scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2A2A34 transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #2A2A34;
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #363640;
+}

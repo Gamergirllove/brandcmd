@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# The Next.js plugin wires up routing, middleware and image handling.
+# Do not add a manual catch-all redirect here — it shadows the plugin's own
+# handler and breaks dynamic routes and middleware.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+
+# NEXT_PUBLIC_* values are inlined at build time, so these must be set in the
+# Netlify UI (Site settings → Environment variables), not just at runtime:
+#   NEXT_PUBLIC_SUPABASE_URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY
+#   NEXT_PUBLIC_API_URL

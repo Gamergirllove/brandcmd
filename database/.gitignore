@@ -1,0 +1,13 @@
+# Secrets — never commit real credentials
+.env
+.env.local
+.env.*.local
+
+# Supabase CLI local state
+supabase/.branches/
+supabase/.temp/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

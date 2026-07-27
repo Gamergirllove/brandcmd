@@ -1,0 +1,132 @@
+# ============================================================
+# Supabase Local Dev Configuration
+# Creator Analytics Platform
+# ============================================================
+# Usage: place this file at <project-root>/supabase/config.toml
+# then run `supabase start` to spin up the local stack.
+
+project_id = "creator-analytics"
+
+[api]
+enabled     = true
+port        = 54321
+schemas     = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows    = 1000
+
+[api.tls]
+enabled = false
+
+[db]
+port       = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.pooler]
+enabled         = false
+port            = 54329
+pool_mode       = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+ip_version = "IPv4"
+
+[studio]
+enabled = true
+port    = 54323
+# Open http://localhost:54323 to use Supabase Studio locally.
+api_url = "http://127.0.0.1"
+
+[inbucket]
+# Local SMTP server for email testing (sign-up confirmations, magic links).
+enabled  = true
+port     = 54324
+smtp_port = 54325
+pop3_port = 54326
+
+[storage]
+enabled       = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+# The URL of your frontend application.
+site_url = "http://localhost:3000"
+
+# Comma-separated list of allowed redirect URLs after OAuth sign-in.
+# Add your production URL(s) here — do NOT use wildcards in production.
+additional_redirect_urls = [
+  "http://localhost:3000",
+  "http://localhost:3000/auth/callback",
+  "http://localhost:3000/dashboard",
+  "https://your-production-domain.com",
+  "https://your-production-domain.com/auth/callback",
+  "https://your-production-domain.com/dashboard"
+]
+
+# JWT expiry (seconds). Default 3600 = 1 hour.
+jwt_expiry = 3600
+
+# Whether to enable refresh token rotation.
+enable_refresh_token_rotation = true
+
+# How long (seconds) before a refresh token must be used or it expires.
+refresh_token_reuse_interval = 10
+
+# Enable email sign-up / sign-in.
+enable_signup = true
+
+# Set to true to require email confirmation before a user can sign in.
+double_confirm_changes = true
+enable_confirmations   = false   # set true in production
+
+[auth.email]
+enable_signup          = true
+double_confirm_changes = true
+enable_confirmations   = false   # flip to true in production
+
+[auth.sms]
+enable_signup         = false
+enable_confirmations  = false
+# Twilio / MessageBird config goes here if SMS OTP is needed.
+
+# ============================================================
+# OAuth Providers
+# Set enabled = true and fill in client_id / secret for each.
+# Secrets should come from environment variables — never hard-code.
+# ============================================================
+
+[auth.external.google]
+# Used for YouTube OAuth (Google identity + YouTube Data API scope).
+enabled     = true
+client_id   = "env(GOOGLE_CLIENT_ID)"
+secret      = "env(GOOGLE_CLIENT_SECRET)"
+# Skip nonce check — required for some mobile clients.
+skip_nonce_check = false
+# Redirect URI to register in Google Cloud Console:
+#   http://localhost:54321/auth/v1/callback  (local dev)
+#   https://<supabase-project>.supabase.co/auth/v1/callback  (production)
+
+[auth.external.facebook]
+# Used for Facebook Pages + Instagram Business OAuth.
+enabled   = true
+client_id = "env(FACEBOOK_APP_ID)"
+secret    = "env(FACEBOOK_APP_SECRET)"
+# Redirect URI to register in Meta Developer Console:
+#   http://localhost:54321/auth/v1/callback  (local dev)
+#   https://<supabase-project>.supabase.co/auth/v1/callback  (production)
+
+# NOTE: Twitter, TikTok, Pinterest, LinkedIn, and Snapchat do NOT have
+# first-class Supabase OAuth provider entries. Handle their OAuth flows
+# in your own backend (Next.js API routes / Edge Functions) and then
+# store the resulting tokens in platform_tokens via upsert_analytics.
+# See README_DATABASE.md for details.
+
+[auth.external.twitter]
+# Twitter OAuth 2.0 is supported as a Supabase provider for *authentication*.
+# For analytics-scope tokens you still need a separate OAuth dance.
+enabled   = false
+client_id = "env(TWITTER_CLIENT_ID)"
+secret    = "env(TWITTER_CLIENT_SECRET)"
