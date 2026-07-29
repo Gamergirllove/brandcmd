@@ -7,6 +7,45 @@ Budget about an hour the first time; most of it is waiting on dashboards.
 
 ---
 
+## This deployment's values
+
+Filled in for the live project. None of these are secrets — the project ref
+appears in every request the browser makes, and the domain is public. **Keys
+never belong in this file**; they go in `.env` (gitignored) and in the
+hosting dashboards.
+
+| | Value |
+| --- | --- |
+| Supabase project ref | `vyljarqnjewwzngwfbzr` |
+| Supabase URL | `https://vyljarqnjewwzngwfbzr.supabase.co` |
+| Supabase auth callback | `https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback` |
+| Backend (production) | `https://brandcmd-backend.onrender.com` |
+| Backend (local) | `http://localhost:8000` |
+| Frontend (local) | `http://localhost:3000` |
+
+### Redirect URIs — copy these verbatim
+
+**Twitch app** (dev.twitch.tv/console/apps):
+
+```
+http://localhost:8000/connect/twitch/callback
+https://brandcmd-backend.onrender.com/connect/twitch/callback
+https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback
+```
+
+**Google OAuth client** (console.cloud.google.com):
+
+```
+http://localhost:8000/connect/youtube/callback
+https://brandcmd-backend.onrender.com/connect/youtube/callback
+https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback
+```
+
+The third line in each is only needed for "Sign in with Twitch/Google" on
+the login page. Skip it if you're using email/password only.
+
+---
+
 ## The two-OAuth thing (read this first)
 
 This app uses Twitch and Google for **two different purposes**, and mixing
@@ -235,9 +274,12 @@ cp .env.example .env
 ```
 
 ```ini
-SUPABASE_URL=https://<your-ref>.supabase.co
+SUPABASE_URL=https://vyljarqnjewwzngwfbzr.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<service_role key from 1c>
 
+# Local dev. On Render set these to the deployed URLs instead:
+#   FRONTEND_URL=https://<your-netlify-site>.netlify.app
+#   BACKEND_URL=https://brandcmd-backend.onrender.com
 FRONTEND_URL=http://localhost:3000
 BACKEND_URL=http://localhost:8000
 
@@ -274,10 +316,15 @@ cp .env.local.example .env.local
 ```
 
 ```ini
-NEXT_PUBLIC_SUPABASE_URL=https://<your-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://vyljarqnjewwzngwfbzr.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key from 1c>
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
+
+Point `NEXT_PUBLIC_API_URL` at `https://brandcmd-backend.onrender.com` if you
+want the local frontend to talk to the deployed backend instead. If you do,
+the backend's `FRONTEND_URL` must include `http://localhost:3000` or CORS
+will block every request.
 
 `NEXT_PUBLIC_*` values are baked in at build time, so restart `npm run dev`
 after changing them — a hot reload won't pick them up.
