@@ -36,7 +36,7 @@ function HudCorners() {
     position: "absolute",
     width: "12px",
     height: "12px",
-    borderColor: "#8B9C3A",
+    borderColor: "var(--brand)",
     borderStyle: "solid",
     opacity: 0.5,
     ...(pos === "tl" && { top: 8, left: 8, borderWidth: "1px 0 0 1px" }),
@@ -64,14 +64,14 @@ function ProgressSteps({ current, total }: { current: number; total: number }) {
             className="h-1 rounded-full transition-all"
             style={{
               width: i === current ? "32px" : "12px",
-              background: i < current ? "#8B9C3A" : i === current ? "#A8BA48" : "#2A2A34",
+              background: i < current ? "var(--brand)" : i === current ? "var(--brand-light)" : "var(--line)",
             }}
           />
         ))}
       </div>
       <p
         className="text-center text-[10px] uppercase tracking-widest"
-        style={{ color: "#555560" }}
+        style={{ color: "var(--text-dim)" }}
       >
         Step {current + 1} of {total}
       </p>
@@ -83,7 +83,7 @@ function StepCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="rounded-xl p-8"
-      style={{ background: "#111115", border: "1px solid #363640", position: "relative" }}
+      style={{ background: "var(--surface)", border: "1px solid var(--line-strong)", position: "relative" }}
     >
       <HudCorners />
       {children}
@@ -93,9 +93,9 @@ function StepCard({ children }: { children: React.ReactNode }) {
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  background: "#0A0A0C",
-  border: "1px solid #363640",
-  color: "#E8E8E8",
+  background: "var(--bg)",
+  border: "1px solid var(--line-strong)",
+  color: "var(--text)",
   borderRadius: "8px",
   padding: "8px 12px",
   fontSize: "14px",
@@ -119,9 +119,9 @@ function PrimaryButton({
       onClick={onClick}
       disabled={disabled || loading}
       className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold transition-colors disabled:opacity-60"
-      style={{ background: "#8B9C3A", color: "#000" }}
-      onMouseOver={(e) => !(disabled || loading) && (e.currentTarget.style.background = "#A8BA48")}
-      onMouseOut={(e) => (e.currentTarget.style.background = "#8B9C3A")}
+      style={{ background: "var(--brand)", color: "#000" }}
+      onMouseOver={(e) => !(disabled || loading) && (e.currentTarget.style.background = "var(--brand-light)")}
+      onMouseOut={(e) => (e.currentTarget.style.background = "var(--brand)")}
     >
       {loading && <Loader2 className="h-4 w-4 animate-spin" />}
       {children}
@@ -161,18 +161,18 @@ function ConnectStep({
 }) {
   return (
     <StepCard>
-      <h1 className="mb-1 text-2xl font-bold" style={{ color: "#E8E8E8" }}>
+      <h1 className="mb-1 text-2xl font-bold" style={{ color: "var(--text)" }}>
         {title}
       </h1>
-      <p className="mb-6" style={{ color: "#888896" }}>
+      <p className="mb-6" style={{ color: "var(--text-muted)" }}>
         {blurb}
       </p>
 
       <div
         className="mb-4 rounded-xl p-5"
         style={{
-          border: connected ? "1px solid #8B9C3A" : "1px solid #2A2A34",
-          background: connected ? "rgba(74,84,32,0.1)" : "#0A0A0C",
+          border: connected ? "1px solid var(--brand)" : "1px solid var(--line)",
+          background: connected ? "var(--brand-wash)" : "var(--bg)",
         }}
       >
         <div className="mb-3 flex items-center gap-3">
@@ -183,10 +183,10 @@ function ConnectStep({
             {letter}
           </div>
           <div className="flex-1">
-            <p className="font-semibold" style={{ color: "#E8E8E8" }}>
+            <p className="font-semibold" style={{ color: "var(--text)" }}>
               {title.replace("Connect your ", "")}
             </p>
-            <p className="text-xs" style={{ color: "#555560" }}>
+            <p className="text-xs" style={{ color: "var(--text-dim)" }}>
               {metrics}
             </p>
           </div>
@@ -194,22 +194,22 @@ function ConnectStep({
             <span
               className="flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
               style={{
-                background: "rgba(61,186,110,0.1)",
+                background: "var(--success-wash)",
                 border: "1px solid rgba(61,186,110,0.25)",
-                color: "#3DBA6E",
+                color: "var(--success)",
               }}
             >
               <Check className="h-3 w-3" /> Connected
             </span>
           )}
         </div>
-        <p className="text-xs" style={{ color: "#555560" }}>
+        <p className="text-xs" style={{ color: "var(--text-dim)" }}>
           BrandCMD never posts or modifies your content. Read-only access only.
         </p>
       </div>
 
       {error && (
-        <p className="mb-3 flex items-center gap-1.5 text-sm" style={{ color: "#E04545" }}>
+        <p className="mb-3 flex items-center gap-1.5 text-sm" style={{ color: "var(--danger)" }}>
           <AlertCircle className="h-4 w-4 shrink-0" />
           {error}
         </p>
@@ -225,7 +225,7 @@ function ConnectStep({
       )}
 
       <div className="mt-3 flex items-center justify-between">
-        <button type="button" onClick={onBack} className="text-sm" style={{ color: "#555560" }}>
+        <button type="button" onClick={onBack} className="text-sm" style={{ color: "var(--text-dim)" }}>
           ← Back
         </button>
         {!connected && (
@@ -233,7 +233,7 @@ function ConnectStep({
             type="button"
             onClick={onNext}
             className="text-sm underline"
-            style={{ color: "#555560" }}
+            style={{ color: "var(--text-dim)" }}
           >
             Skip for now
           </button>
@@ -345,15 +345,15 @@ function OnboardingInner() {
       <>
         <ProgressSteps current={0} total={TOTAL_STEPS} />
         <StepCard>
-          <h1 className="mb-1 text-2xl font-bold" style={{ color: "#E8E8E8" }}>
+          <h1 className="mb-1 text-2xl font-bold" style={{ color: "var(--text)" }}>
             Welcome to BrandCMD
           </h1>
-          <p className="mb-6" style={{ color: "#888896" }}>
+          <p className="mb-6" style={{ color: "var(--text-muted)" }}>
             Your creator command center. Setup takes under 2 minutes.
           </p>
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium" style={{ color: "#888896" }}>
+              <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
                 Creator handle
               </label>
               <input
@@ -362,12 +362,12 @@ function OnboardingInner() {
                 value={formData.creatorHandle}
                 onChange={(e) => update({ creatorHandle: e.target.value })}
                 style={inputStyle}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium" style={{ color: "#888896" }}>
+              <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
                 Display name
               </label>
               <input
@@ -376,8 +376,8 @@ function OnboardingInner() {
                 value={formData.displayName}
                 onChange={(e) => update({ displayName: e.target.value })}
                 style={inputStyle}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
               />
             </div>
           </div>
@@ -400,10 +400,10 @@ function OnboardingInner() {
       <>
         <ProgressSteps current={1} total={TOTAL_STEPS} />
         <StepCard>
-          <h1 className="mb-1 text-2xl font-bold" style={{ color: "#E8E8E8" }}>
+          <h1 className="mb-1 text-2xl font-bold" style={{ color: "var(--text)" }}>
             What kind of creator are you?
           </h1>
-          <p className="mb-6" style={{ color: "#888896" }}>
+          <p className="mb-6" style={{ color: "var(--text-muted)" }}>
             We&apos;ll tailor your dashboard to your content type.
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -416,26 +416,26 @@ function OnboardingInner() {
                   onClick={() => update({ creatorType: ct.type })}
                   className="relative flex flex-col items-center gap-2 rounded-xl p-4 text-center transition-all"
                   style={{
-                    border: selected ? "1px solid #8B9C3A" : "1px solid #2A2A34",
-                    background: selected ? "rgba(74,84,32,0.2)" : "#0A0A0C",
+                    border: selected ? "1px solid var(--brand)" : "1px solid var(--line)",
+                    background: selected ? "var(--brand-wash-strong)" : "var(--bg)",
                   }}
                   onMouseOver={(e) => {
                     if (!selected) {
-                      e.currentTarget.style.borderColor = "#8B9C3A";
-                      e.currentTarget.style.background = "rgba(74,84,32,0.1)";
+                      e.currentTarget.style.borderColor = "var(--brand)";
+                      e.currentTarget.style.background = "var(--brand-wash)";
                     }
                   }}
                   onMouseOut={(e) => {
                     if (!selected) {
-                      e.currentTarget.style.borderColor = "#2A2A34";
-                      e.currentTarget.style.background = "#0A0A0C";
+                      e.currentTarget.style.borderColor = "var(--line)";
+                      e.currentTarget.style.background = "var(--bg)";
                     }
                   }}
                 >
                   {selected && (
                     <span
                       className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full"
-                      style={{ background: "#8B9C3A" }}
+                      style={{ background: "var(--brand)" }}
                     >
                       <Check className="h-3 w-3" style={{ color: "#000" }} />
                     </span>
@@ -443,7 +443,7 @@ function OnboardingInner() {
                   <span className="text-2xl">{ct.emoji}</span>
                   <span
                     className="text-xs font-medium"
-                    style={{ color: selected ? "#A8BA48" : "#888896" }}
+                    style={{ color: selected ? "var(--brand-light)" : "var(--text-muted)" }}
                   >
                     {ct.label}
                   </span>
@@ -457,7 +457,7 @@ function OnboardingInner() {
             </PrimaryButton>
           </div>
           <div className="mt-3 text-center">
-            <button type="button" onClick={back} className="text-sm" style={{ color: "#555560" }}>
+            <button type="button" onClick={back} className="text-sm" style={{ color: "var(--text-dim)" }}>
               ← Back
             </button>
           </div>
@@ -476,7 +476,7 @@ function OnboardingInner() {
           title="Connect your Twitch"
           blurb="Pull in followers, subscribers, stream stats, and more."
           metrics="Followers · subscribers · broadcasts · VOD views"
-          color="#9146FF"
+          color="var(--twitch)"
           letter="T"
           buttonLabel="Connect Twitch →"
           connected={isConnected("twitch")}
@@ -500,7 +500,7 @@ function OnboardingInner() {
           title="Connect your YouTube"
           blurb="Track subscribers, views, likes and comments."
           metrics="Subscribers · views · likes · comments"
-          color="#FF0000"
+          color="var(--youtube)"
           letter="Y"
           buttonLabel="Connect YouTube via Google →"
           connected={isConnected("youtube")}
@@ -519,16 +519,16 @@ function OnboardingInner() {
     <>
       <ProgressSteps current={4} total={TOTAL_STEPS} />
       <StepCard>
-        <h1 className="mb-1 text-2xl font-bold" style={{ color: "#E8E8E8" }}>
+        <h1 className="mb-1 text-2xl font-bold" style={{ color: "var(--text)" }}>
           Set your first goal
         </h1>
-        <p className="mb-6" style={{ color: "#888896" }}>
+        <p className="mb-6" style={{ color: "var(--text-muted)" }}>
           BrandCMD will auto-complete this goal when you hit your target.
         </p>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-sm font-medium" style={{ color: "#888896" }}>
+            <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
               Goal type
             </label>
             <select
@@ -537,14 +537,14 @@ function OnboardingInner() {
                 update({ goalType: e.target.value ? (e.target.value as GoalType) : null })
               }
               style={{ ...inputStyle, cursor: "pointer" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
             >
-              <option value="" style={{ background: "#111115" }}>
+              <option value="" style={{ background: "var(--surface)" }}>
                 Select a goal…
               </option>
               {GOAL_TYPES.map((type) => (
-                <option key={type} value={type} style={{ background: "#111115" }}>
+                <option key={type} value={type} style={{ background: "var(--surface)" }}>
                   {GOAL_LABELS[type]}
                 </option>
               ))}
@@ -553,7 +553,7 @@ function OnboardingInner() {
 
           {formData.goalType && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium" style={{ color: "#888896" }}>
+              <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
                 Target
               </label>
               <input
@@ -565,15 +565,15 @@ function OnboardingInner() {
                   update({ goalTargetValue: e.target.value ? Number(e.target.value) : null })
                 }
                 style={inputStyle}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
               />
             </div>
           )}
         </div>
 
         {finishError && (
-          <p className="mt-4 flex items-center gap-1.5 text-sm" style={{ color: "#E04545" }}>
+          <p className="mt-4 flex items-center gap-1.5 text-sm" style={{ color: "var(--danger)" }}>
             <AlertCircle className="h-4 w-4 shrink-0" />
             {finishError}
           </p>
@@ -592,7 +592,7 @@ function OnboardingInner() {
         </div>
 
         <div className="mt-3 flex items-center justify-between">
-          <button type="button" onClick={back} className="text-sm" style={{ color: "#555560" }}>
+          <button type="button" onClick={back} className="text-sm" style={{ color: "var(--text-dim)" }}>
             ← Back
           </button>
           {!formData.goalType && (
@@ -601,7 +601,7 @@ function OnboardingInner() {
               onClick={handleFinish}
               disabled={submitting}
               className="text-sm underline"
-              style={{ color: "#555560" }}
+              style={{ color: "var(--text-dim)" }}
             >
               Skip and go to dashboard
             </button>

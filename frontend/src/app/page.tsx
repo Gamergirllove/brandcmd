@@ -1,69 +1,58 @@
-// Client component: the CTA buttons use inline hover handlers, which a
-// server component cannot serialise across the boundary.
-"use client";
-
 import Link from "next/link";
 import { BarChart3, Target, FileText } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
-function BrandLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="12.5" stroke="#8B9C3A" strokeWidth="1.5"/>
-        <path d="M14 5.5C14 5.5 8.5 8.5 8.5 14.5C8.5 18.2 11 20.5 14 20.5C17 20.5 19.5 18.2 19.5 14.5C19.5 8.5 14 5.5 14 5.5Z" fill="#18181E" stroke="#4A5420" strokeWidth="0.8"/>
-        <path d="M8.5 14.5H11L12.5 11.5L15 17.5L16.5 14.5H19.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-      <span style={{ fontWeight: 700, letterSpacing: "0.5px", color: "#E8E8E8" }}>
-        BRAND<span style={{ color: "#8B9C3A" }}>CMD</span>
-      </span>
-    </div>
-  );
-}
+/**
+ * Marketing landing page.
+ *
+ * A server component — there is no interactivity here beyond links, and
+ * hover states belong in CSS. (This was previously forced client-side by
+ * inline onMouseOver handlers, which a server component cannot serialise.)
+ */
 
 const FEATURES = [
   {
     icon: BarChart3,
-    title: "Unified Dashboard",
-    description: "See all your numbers in one place. Stop switching between Twitch and YouTube tabs.",
+    title: "Unified dashboard",
+    description:
+      "Every number in one place. Stop switching between Twitch and YouTube tabs.",
   },
   {
     icon: Target,
-    title: "Goal Tracking",
-    description: "Set milestones for followers, views, and subscribers. Auto-complete when you hit them.",
+    title: "Goal tracking",
+    description:
+      "Set targets for followers, subscribers and views. They complete themselves when you hit them.",
   },
   {
     icon: FileText,
-    title: "Weekly Reports",
-    description: "Auto-generated performance summaries delivered every Monday morning.",
+    title: "Performance reports",
+    description:
+      "Period summaries across every connected platform, exportable to CSV.",
   },
 ];
 
 const PLATFORMS = [
   {
     name: "Twitch",
-    color: "#9146FF",
-    topColor: "#9146FF",
-    description: "Followers, subscribers, avg viewers, hours streamed, chat stats",
+    color: "var(--twitch)",
+    description: "Followers, subscribers, broadcasts, hours streamed, VOD views",
     available: true,
   },
   {
     name: "YouTube",
-    color: "#FF0000",
-    topColor: "#FF0000",
-    description: "Subscribers, views, watch time, revenue estimates, top videos",
+    color: "var(--youtube)",
+    description: "Subscribers, views, likes, comments, daily analytics",
     available: true,
   },
   {
     name: "TikTok",
-    color: "#555560",
-    topColor: "#555560",
+    color: "var(--text-dim)",
     description: "Followers, views, likes, shares, trending content",
     available: false,
   },
   {
     name: "Discord",
-    color: "#555560",
-    topColor: "#555560",
+    color: "var(--text-dim)",
     description: "Server members, activity, growth trends",
     available: false,
   },
@@ -71,201 +60,142 @@ const PLATFORMS = [
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col" style={{ background: "#0A0A0C", color: "#E8E8E8" }}>
-      {/* Nav */}
+    <div className="flex min-h-screen flex-col">
       <header
-        className="sticky top-0 z-50 border-b"
-        style={{ background: "#111115", borderColor: "#2A2A34" }}
+        className="sticky top-0 z-50 bg-surface"
+        style={{ borderBottom: "1px solid var(--line)" }}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <BrandLogo />
+          <BrandLogo size={28} />
           <nav className="flex items-center gap-3">
             <Link
               href="/login"
-              className="text-sm font-medium transition-colors"
-              style={{ color: "#888896" }}
+              className="text-sm font-medium text-muted transition-colors hover:text-[var(--text)]"
             >
               Sign in
             </Link>
-            <Link
-              href="/signup"
-              className="rounded-lg px-4 py-2 text-sm font-bold transition-colors"
-              style={{ background: "#8B9C3A", color: "#000" }}
-              onMouseOver={(e) => (e.currentTarget.style.background = "#A8BA48")}
-              onMouseOut={(e) => (e.currentTarget.style.background = "#8B9C3A")}
-            >
+            <Link href="/signup" className="btn-primary">
               Get started free
             </Link>
           </nav>
         </div>
-        {/* Olive underline accent bottom-left */}
         <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: "24px",
-            width: "60px",
-            height: "1px",
-            background: "#8B9C3A",
-          }}
+          className="absolute bottom-0 left-6 h-px w-16"
+          style={{ background: "var(--brand)" }}
         />
       </header>
 
       <main className="flex-1">
         {/* Hero */}
-        <section
-          className="mx-auto max-w-4xl px-6 py-24 text-center"
-          style={{ position: "relative" }}
-        >
-          {/* Dot grid bg */}
+        <section className="relative mx-auto max-w-4xl px-6 py-24 text-center">
           <div
+            className="pointer-events-none absolute inset-0 opacity-60"
             style={{
-              position: "absolute",
-              inset: 0,
               backgroundImage:
-                "radial-gradient(circle, #1A1A22 1px, transparent 1px)",
+                "radial-gradient(circle, var(--surface-3) 1px, transparent 1px)",
               backgroundSize: "28px 28px",
-              opacity: 0.6,
-              pointerEvents: "none",
             }}
+            aria-hidden="true"
           />
-          <div style={{ position: "relative" }}>
-            <h1
-              className="mb-6 text-5xl font-extrabold tracking-tight sm:text-6xl"
-              style={{ color: "#E8E8E8" }}
-            >
-              Your Creator Command Center
+          <div className="relative">
+            <h1 className="mb-6 text-4xl font-extrabold tracking-tight sm:text-6xl">
+              Your creator command center
             </h1>
-            <p className="mx-auto mb-8 max-w-xl text-lg" style={{ color: "#888896" }}>
-              Stop switching between dashboards. BrandCMD unifies your Twitch and YouTube
-              analytics in one place.
+            <p className="mx-auto mb-8 max-w-xl text-lg text-muted">
+              Stop switching between dashboards. BrandCMD unifies your Twitch and
+              YouTube analytics in one place.
             </p>
 
-            {/* Trust badges */}
             <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
-              {["Free to start", "Twitch + YouTube", "Real-time sync"].map((badge) => (
-                <span
-                  key={badge}
-                  className="rounded-full px-4 py-1.5 text-sm font-medium"
-                  style={{
-                    border: "1px solid #8B9C3A",
-                    color: "#A8BA48",
-                    background: "rgba(139,156,58,0.08)",
-                  }}
-                >
-                  {badge}
-                </span>
-              ))}
+              {["Free to start", "Twitch + YouTube", "Live platform data"].map(
+                (badge) => (
+                  <span key={badge} className="pill-brand px-4 py-1.5 text-sm">
+                    {badge}
+                  </span>
+                )
+              )}
             </div>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              <Link
-                href="/signup"
-                className="rounded-lg px-6 py-3 text-base font-bold transition-colors"
-                style={{ background: "#8B9C3A", color: "#000" }}
-              >
+              <Link href="/signup" className="btn-primary px-6 py-3 text-base">
                 Get started free →
               </Link>
             </div>
-            <p className="mt-4 text-sm" style={{ color: "#555560" }}>
+            <p className="mt-4 text-sm text-dim">
               Already have an account?{" "}
-              <Link href="/login" className="font-medium" style={{ color: "#8B9C3A" }}>
+              <Link
+                href="/login"
+                className="font-medium text-brand hover:underline"
+              >
                 Sign in
               </Link>
             </p>
           </div>
         </section>
 
-        {/* Feature Cards */}
+        {/* Features */}
         <section
-          className="py-20"
-          style={{ borderTop: "1px solid #2A2A34", background: "#111115" }}
+          className="bg-surface py-20"
+          style={{ borderTop: "1px solid var(--line)" }}
         >
           <div className="mx-auto max-w-6xl px-6">
-            <h2
-              className="mb-12 text-center text-3xl font-bold"
-              style={{ color: "#E8E8E8" }}
-            >
+            <h2 className="mb-12 text-center text-3xl font-bold">
               Everything you need to grow
             </h2>
             <div className="grid gap-6 sm:grid-cols-3">
-              {FEATURES.map((f) => (
+              {FEATURES.map((feature) => (
                 <div
-                  key={f.title}
-                  className="rounded-xl p-6 transition-colors"
-                  style={{ background: "#111115", border: "1px solid #2A2A34" }}
-                  onMouseOver={(e) =>
-                    ((e.currentTarget as HTMLDivElement).style.borderColor = "#8B9C3A")
-                  }
-                  onMouseOut={(e) =>
-                    ((e.currentTarget as HTMLDivElement).style.borderColor = "#2A2A34")
-                  }
+                  key={feature.title}
+                  className="card p-6 transition-colors hover:border-[var(--brand)]"
                 >
                   <div
                     className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg"
-                    style={{ background: "#4A5420" }}
+                    style={{ background: "var(--brand-dim)" }}
                   >
-                    <f.icon className="h-5 w-5" style={{ color: "#A8BA48" }} />
+                    <feature.icon
+                      className="h-5 w-5"
+                      style={{ color: "var(--brand-light)" }}
+                    />
                   </div>
-                  <h3 className="mb-2 font-semibold" style={{ color: "#E8E8E8" }}>
-                    {f.title}
-                  </h3>
-                  <p className="text-sm" style={{ color: "#888896" }}>
-                    {f.description}
-                  </p>
+                  <h3 className="mb-2 font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-muted">{feature.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Platform Section */}
-        <section className="py-20" style={{ background: "#0A0A0C" }}>
+        {/* Platforms */}
+        <section className="py-20">
           <div className="mx-auto max-w-6xl px-6">
-            <h2
-              className="mb-12 text-center text-3xl font-bold"
-              style={{ color: "#E8E8E8" }}
-            >
+            <h2 className="mb-12 text-center text-3xl font-bold">
               Connect your platforms
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {PLATFORMS.map((p) => (
+              {PLATFORMS.map((platform) => (
                 <div
-                  key={p.name}
-                  className="rounded-xl p-5"
-                  style={{
-                    background: "#111115",
-                    border: "1px solid #2A2A34",
-                    borderTop: `2px solid ${p.topColor}`,
-                    opacity: p.available ? 1 : 0.5,
-                  }}
+                  key={platform.name}
+                  className="card card-topped p-5"
+                  style={
+                    {
+                      "--accent-color": platform.color,
+                      opacity: platform.available ? 1 : 0.5,
+                    } as React.CSSProperties
+                  }
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div
                       className="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold text-white"
-                      style={{ background: p.color }}
+                      style={{ background: platform.color }}
                     >
-                      {p.name[0]}
+                      {platform.name[0]}
                     </div>
-                    {!p.available && (
-                      <span
-                        className="rounded-full px-2.5 py-0.5 text-xs font-medium"
-                        style={{
-                          background: "#18181E",
-                          color: "#8B9C3A",
-                          border: "1px solid #4A5420",
-                        }}
-                      >
-                        Coming soon
-                      </span>
+                    {!platform.available && (
+                      <span className="pill-brand">Coming soon</span>
                     )}
                   </div>
-                  <p className="mb-1 font-semibold" style={{ color: "#E8E8E8" }}>
-                    {p.name}
-                  </p>
-                  <p className="text-xs" style={{ color: "#888896" }}>
-                    {p.description}
-                  </p>
+                  <p className="mb-1 font-semibold">{platform.name}</p>
+                  <p className="text-xs text-muted">{platform.description}</p>
                 </div>
               ))}
             </div>
@@ -273,17 +203,27 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer style={{ background: "#111115", borderTop: "1px solid #2A2A34" }}>
+      <footer
+        className="bg-surface"
+        style={{ borderTop: "1px solid var(--line)" }}
+      >
         <div className="mx-auto max-w-6xl px-6 py-8 text-center text-sm">
-          <p className="mb-3" style={{ color: "#555560" }}>
-            <span style={{ fontWeight: 700, color: "#E8E8E8" }}>BRAND</span>
-            <span style={{ fontWeight: 700, color: "#8B9C3A" }}>CMD</span>
-            {" "}© 2026
+          <p className="mb-3 text-dim">
+            <span className="font-bold" style={{ color: "var(--text)" }}>
+              BRAND
+            </span>
+            <span className="font-bold text-brand">CMD</span> © 2026
           </p>
-          <div className="flex justify-center gap-6" style={{ color: "#555560" }}>
-            <Link href="/privacy" className="hover:text-[#888896]">Privacy</Link>
-            <Link href="/terms" className="hover:text-[#888896]">Terms</Link>
+          <div className="flex justify-center gap-6 text-dim">
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-[var(--text-muted)]"
+            >
+              Privacy
+            </Link>
+            {/* No Terms link until one is actually drafted — a 404 in the
+                footer is worse than no link, and placeholder legalese is
+                worse than both. */}
           </div>
         </div>
       </footer>

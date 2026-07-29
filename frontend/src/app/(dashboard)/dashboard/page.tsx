@@ -28,29 +28,13 @@ import {
 const RANGES = { "7d": 7, "30d": 30, "90d": 90 } as const;
 type RangeKey = keyof typeof RANGES;
 
-/** HUD corner brackets — 4 absolute-positioned L-shapes */
-function HudCorners() {
-  const cornerStyle = (pos: "tl" | "tr" | "bl" | "br"): React.CSSProperties => ({
-    position: "absolute",
-    width: "10px",
-    height: "10px",
-    borderColor: "#8B9C3A",
-    borderStyle: "solid",
-    opacity: 0.4,
-    ...(pos === "tl" && { top: 6, left: 6, borderWidth: "1px 0 0 1px" }),
-    ...(pos === "tr" && { top: 6, right: 6, borderWidth: "1px 1px 0 0" }),
-    ...(pos === "bl" && { bottom: 6, left: 6, borderWidth: "0 0 1px 1px" }),
-    ...(pos === "br" && { bottom: 6, right: 6, borderWidth: "0 1px 1px 0" }),
-  });
-  return (
-    <>
-      <div style={cornerStyle("tl")} />
-      <div style={cornerStyle("tr")} />
-      <div style={cornerStyle("bl")} />
-      <div style={cornerStyle("br")} />
-    </>
-  );
-}
+const TOOLTIP_STYLE = {
+  background: "var(--surface-2)",
+  border: "1px solid var(--line-strong)",
+  borderRadius: "8px",
+  fontSize: "12px",
+  color: "var(--text)",
+};
 
 function StatCard({
   title,
@@ -65,124 +49,102 @@ function StatCard({
   icon: React.ElementType;
   loading: boolean;
 }) {
-  return (
-    <div
-      className="rounded-xl p-5"
-      style={{
-        background: "#111115",
-        border: "1px solid #2A2A34",
-        borderLeft: "2px solid #8B9C3A",
-      }}
-    >
-      {loading ? (
-        <div className="space-y-3">
-          <div className="h-3 w-24 rounded animate-pulse" style={{ background: "#18181E" }} />
-          <div className="h-7 w-32 rounded animate-pulse" style={{ background: "#18181E" }} />
-          <div className="h-3 w-20 rounded animate-pulse" style={{ background: "#18181E" }} />
-        </div>
-      ) : (
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-wider" style={{ color: "#555560" }}>
-              {title}
-            </p>
-            <p className="mt-1 text-2xl font-bold" style={{ color: "#E8E8E8" }}>
-              {value}
-            </p>
-            {delta !== undefined && delta !== null && (
-              <div
-                className="mt-1 flex items-center gap-1 text-xs font-medium"
-                style={{ color: delta >= 0 ? "#3DBA6E" : "#E04545" }}
-              >
-                {delta >= 0 ? (
-                  <ArrowUp className="h-3 w-3" />
-                ) : (
-                  <ArrowDown className="h-3 w-3" />
-                )}
-                {Math.abs(delta).toFixed(1)}% vs previous period
-              </div>
-            )}
-          </div>
-          <div
-            className="flex h-9 w-9 items-center justify-center rounded-lg"
-            style={{ background: "#4A5420" }}
-          >
-            <Icon className="h-4 w-4" style={{ color: "#A8BA48" }} />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/** Metric tiles for one connected platform, driven by that platform's own extras. */
-function PlatformCard({ metrics }: { metrics: PlatformMetrics }) {
-  const config = PLATFORM_CONFIGS[metrics.platform];
-  const raw = metrics.raw ?? {};
-
-  const tiles: { label: string; value: string }[] = [];
-
-  if (metrics.platform === "twitch") {
-    tiles.push(
-      { label: "Followers", value: formatNumber(metrics.followers) },
-      { label: "Subscribers", value: formatNumber(Number(raw.subscribers ?? 0)) },
-      { label: "Hours Streamed", value: String(raw.hours_streamed ?? 0) },
-      { label: "Broadcasts", value: String(raw.broadcasts ?? 0) }
-    );
-  } else if (metrics.platform === "youtube") {
-    tiles.push(
-      { label: "Subscribers", value: formatNumber(metrics.followers) },
-      { label: "Views", value: formatNumber(metrics.views) },
-      { label: "Likes", value: formatNumber(metrics.likes) },
-      { label: "Comments", value: formatNumber(metrics.comments) }
-    );
-  } else {
-    tiles.push(
-      { label: "Followers", value: formatNumber(metrics.followers) },
-      { label: "Views", value: formatNumber(metrics.views) },
-      { label: "Likes", value: formatNumber(metrics.likes) },
-      { label: "Engagement", value: `${metrics.engagementRate.toFixed(1)}%` }
+  if (loading) {
+    return (
+      <div className="card card-accent space-y-3 p-5">
+        <div className="skeleton h-3 w-24" />
+        <div className="skeleton h-7 w-32" />
+        <div className="skeleton h-3 w-20" />
+      </div>
     );
   }
 
   return (
-    <div
-      className="rounded-xl overflow-hidden"
-      style={{
-        background: "#111115",
-        border: "1px solid #2A2A34",
-        borderTop: `2px solid ${config.color}`,
-        position: "relative",
-      }}
-    >
-      <HudCorners />
-      <div className="px-5 py-4">
-        <div className="flex items-center gap-2 mb-3">
+    <div className="card card-accent flex items-start justify-between p-5">
+      <div>
+        <p className="label-caps">{title}</p>
+        <p className="mt-1 text-2xl font-bold">{value}</p>
+        {delta !== undefined && delta !== null && (
           <div
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-white"
+            className="mt-1 flex items-center gap-1 text-xs font-medium"
+            style={{ color: delta >= 0 ? "var(--success)" : "var(--danger)" }}
+          >
+            {delta >= 0 ? (
+              <ArrowUp className="h-3 w-3" />
+            ) : (
+              <ArrowDown className="h-3 w-3" />
+            )}
+            {Math.abs(delta).toFixed(1)}% vs previous period
+          </div>
+        )}
+      </div>
+      <div
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+        style={{ background: "var(--brand-dim)" }}
+      >
+        <Icon className="h-4 w-4" style={{ color: "var(--brand-light)" }} />
+      </div>
+    </div>
+  );
+}
+
+/** Metric tiles for one connected platform, driven by that platform's extras. */
+function PlatformCard({ metrics }: { metrics: PlatformMetrics }) {
+  const config = PLATFORM_CONFIGS[metrics.platform];
+  const raw = metrics.raw ?? {};
+
+  const tiles =
+    metrics.platform === "twitch"
+      ? [
+          { label: "Followers", value: formatNumber(metrics.followers) },
+          {
+            label: "Subscribers",
+            value: formatNumber(Number(raw.subscribers ?? 0)),
+          },
+          { label: "Hours Streamed", value: String(raw.hours_streamed ?? 0) },
+          { label: "Broadcasts", value: String(raw.broadcasts ?? 0) },
+        ]
+      : metrics.platform === "youtube"
+        ? [
+            { label: "Subscribers", value: formatNumber(metrics.followers) },
+            { label: "Views", value: formatNumber(metrics.views) },
+            { label: "Likes", value: formatNumber(metrics.likes) },
+            { label: "Comments", value: formatNumber(metrics.comments) },
+          ]
+        : [
+            { label: "Followers", value: formatNumber(metrics.followers) },
+            { label: "Views", value: formatNumber(metrics.views) },
+            { label: "Likes", value: formatNumber(metrics.likes) },
+            {
+              label: "Engagement",
+              value: `${metrics.engagementRate.toFixed(1)}%`,
+            },
+          ];
+
+  return (
+    <div
+      className="card card-topped hud relative overflow-hidden"
+      style={{ "--accent-color": config.color } as React.CSSProperties}
+    >
+      <div className="hud-full absolute inset-0" aria-hidden="true" />
+      <div className="relative px-5 py-4">
+        <div className="mb-3 flex items-center gap-2">
+          <div
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
             style={{ background: config.color }}
           >
             {config.name[0]}
           </div>
-          <div>
-            <p className="font-semibold text-sm" style={{ color: "#E8E8E8" }}>
-              {config.name}
-            </p>
-            <p className="text-xs" style={{ color: "#555560" }}>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">{config.name}</p>
+            <p className="truncate text-xs text-dim">
               {metrics.username ? `@${metrics.username}` : "Connected"}
             </p>
           </div>
         </div>
 
         {metrics.needsReconnect ? (
-          <div
-            className="flex items-start gap-2 rounded-lg p-3 text-xs"
-            style={{
-              background: "rgba(224,69,69,0.08)",
-              border: "1px solid rgba(224,69,69,0.3)",
-              color: "#E04545",
-            }}
-          >
+          <div className="alert-danger text-xs">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
               Access expired.{" "}
@@ -192,23 +154,15 @@ function PlatformCard({ metrics }: { metrics: PlatformMetrics }) {
             </span>
           </div>
         ) : metrics.error ? (
-          <p className="text-xs" style={{ color: "#888896" }}>
+          <p className="text-xs text-muted">
             Metrics unavailable right now. We&apos;ll retry on the next refresh.
           </p>
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {tiles.map((tile) => (
-              <div
-                key={tile.label}
-                className="rounded-lg p-2"
-                style={{ background: "#0A0A0C", border: "1px solid #2A2A34" }}
-              >
-                <p className="text-xs" style={{ color: "#555560" }}>
-                  {tile.label}
-                </p>
-                <p className="font-semibold text-sm" style={{ color: "#E8E8E8" }}>
-                  {tile.value}
-                </p>
+              <div key={tile.label} className="card-inset p-2">
+                <p className="text-xs text-dim">{tile.label}</p>
+                <p className="text-sm font-semibold">{tile.value}</p>
               </div>
             ))}
           </div>
@@ -229,7 +183,7 @@ export default function DashboardPage() {
   );
 
   // Merge every platform's daily series into one row per date, one key per
-  // platform, which is the shape recharts wants for a multi-line chart.
+  // platform — the shape recharts wants for a multi-line chart.
   const chartData = useMemo(() => {
     if (!data) return [];
     const byDate = new Map<string, Record<string, string | number>>();
@@ -248,11 +202,15 @@ export default function DashboardPage() {
   }, [data]);
 
   const chartPlatforms = useMemo(
-    () => data?.timeSeries.filter((s) => s.data.length > 0).map((s) => s.platform) ?? [],
+    () =>
+      data?.timeSeries.filter((s) => s.data.length > 0).map((s) => s.platform) ??
+      [],
     [data]
   );
 
-  const goalsOnTrack = goals.filter((g) => g.completed || g.progressPct >= 50).length;
+  const goalsOnTrack = goals.filter(
+    (g) => g.completed || g.progressPct >= 50
+  ).length;
 
   const viewsDelta = useMemo(() => {
     const deltas = connected
@@ -264,14 +222,8 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div
-        className="rounded-xl px-5 py-4 text-sm"
-        style={{
-          background: "rgba(224,69,69,0.08)",
-          border: "1px solid rgba(224,69,69,0.3)",
-          color: "#E04545",
-        }}
-      >
+      <div className="alert-danger">
+        <AlertTriangle className="h-4 w-4 shrink-0" />
         Could not load your analytics: {error}
       </div>
     );
@@ -281,60 +233,46 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Time range tabs */}
-      <div
-        className="flex items-center gap-1 rounded-lg p-1 w-fit"
-        style={{ background: "#111115", border: "1px solid #2A2A34" }}
-      >
-        {(["30d", "7d", "90d"] as const).map((r) => (
+      <div className="segmented">
+        {(["30d", "7d", "90d"] as const).map((key) => (
           <button
-            key={r}
-            onClick={() => setRange(r)}
-            className="rounded-md px-4 py-1.5 text-sm font-medium transition-colors"
-            style={
-              range === r
-                ? {
-                    background: "rgba(74,84,32,0.2)",
-                    color: "#A8BA48",
-                    border: "1px solid #4A5420",
-                  }
-                : { color: "#555560", border: "1px solid transparent" }
+            key={key}
+            onClick={() => setRange(key)}
+            className={
+              range === key
+                ? "segmented-item segmented-item-active"
+                : "segmented-item"
             }
           >
-            {r === "30d" ? "Last 30 days" : r === "7d" ? "7 days" : "90 days"}
+            {key === "30d"
+              ? "Last 30 days"
+              : key === "7d"
+                ? "7 days"
+                : "90 days"}
           </button>
         ))}
       </div>
 
       {nothingConnected ? (
-        <div
-          className="rounded-xl p-10 text-center"
-          style={{ background: "#111115", border: "1px dashed #363640", position: "relative" }}
-        >
-          <HudCorners />
+        <div className="card-dashed hud relative p-10 text-center">
+          <div className="hud-full absolute inset-0" aria-hidden="true" />
           <div
             className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full"
-            style={{ background: "#4A5420" }}
+            style={{ background: "var(--brand-dim)" }}
           >
-            <Plus className="h-6 w-6" style={{ color: "#8B9C3A" }} />
+            <Plus className="h-6 w-6 text-brand" />
           </div>
-          <p className="font-semibold" style={{ color: "#E8E8E8" }}>
-            No platforms connected yet
+          <p className="heading">No platforms connected yet</p>
+          <p className="mt-1 text-sm text-muted">
+            Connect Twitch or YouTube to start pulling live analytics into your
+            command center.
           </p>
-          <p className="mt-1 text-sm" style={{ color: "#888896" }}>
-            Connect Twitch or YouTube to start pulling live analytics into your command center.
-          </p>
-          <Link
-            href="/connect"
-            className="mt-5 inline-block rounded-lg px-5 py-2 text-sm font-bold"
-            style={{ background: "#8B9C3A", color: "#000" }}
-          >
+          <Link href="/connect" className="btn-primary mt-5">
             Connect a platform →
           </Link>
         </div>
       ) : (
         <>
-          {/* Stats row */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
               title="Total Followers"
@@ -357,22 +295,20 @@ export default function DashboardPage() {
             />
             <StatCard
               title="Goals"
-              value={goals.length ? `${goalsOnTrack} / ${goals.length} on track` : "None set"}
+              value={
+                goals.length
+                  ? `${goalsOnTrack} / ${goals.length} on track`
+                  : "None set"
+              }
               icon={Target}
               loading={isLoading}
             />
           </div>
 
-          {/* Views chart */}
-          <div
-            className="rounded-xl p-5"
-            style={{ background: "#111115", border: "1px solid #2A2A34" }}
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-semibold" style={{ color: "#E8E8E8" }}>
-                Daily views
-              </h2>
-              <div className="flex items-center gap-4 text-xs" style={{ color: "#888896" }}>
+          <div className="card p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="heading">Daily views</h2>
+              <div className="flex items-center gap-4 text-xs text-muted">
                 {chartPlatforms.map((platform) => (
                   <span key={platform} className="flex items-center gap-1.5">
                     <span
@@ -385,33 +321,30 @@ export default function DashboardPage() {
               </div>
             </div>
             {isLoading ? (
-              <div className="h-64 animate-pulse rounded-lg" style={{ background: "#18181E" }} />
+              <div className="skeleton h-64" />
             ) : chartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={260}>
-                <LineChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2A2A34" />
+                <LineChart
+                  data={chartData}
+                  margin={{ top: 4, right: 4, bottom: 0, left: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--line)" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fontSize: 11, fill: "#555560" }}
+                    tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                     tickLine={false}
                     axisLine={false}
                     interval={Math.max(Math.floor(chartData.length / 6), 0)}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: "#555560" }}
+                    tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(v) => formatNumber(v)}
                     width={48}
                   />
                   <Tooltip
-                    contentStyle={{
-                      background: "#18181E",
-                      border: "1px solid #363640",
-                      borderRadius: "8px",
-                      fontSize: "12px",
-                      color: "#E8E8E8",
-                    }}
+                    contentStyle={TOOLTIP_STYLE}
                     formatter={(value: number) => [formatNumber(value)]}
                   />
                   {chartPlatforms.map((platform) => (
@@ -429,16 +362,12 @@ export default function DashboardPage() {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <div
-                className="flex h-64 items-center justify-center text-center text-sm"
-                style={{ color: "#555560" }}
-              >
+              <div className="flex h-64 items-center justify-center text-center text-sm text-dim">
                 No daily activity in this period yet.
               </div>
             )}
           </div>
 
-          {/* Platform cards row */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {connected.map((metrics) => (
               <PlatformCard key={metrics.platform} metrics={metrics} />
@@ -446,25 +375,16 @@ export default function DashboardPage() {
 
             <Link
               href="/connect"
-              className="flex cursor-pointer items-center justify-center rounded-xl p-8 transition-colors"
-              style={{ background: "transparent", border: "1px dashed #363640" }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = "#8B9C3A";
-                e.currentTarget.style.background = "rgba(139,156,58,0.04)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = "#363640";
-                e.currentTarget.style.background = "transparent";
-              }}
+              className="card-dashed flex items-center justify-center p-8"
             >
               <div className="text-center">
                 <div
                   className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full"
-                  style={{ background: "#4A5420" }}
+                  style={{ background: "var(--brand-dim)" }}
                 >
-                  <Plus className="h-5 w-5" style={{ color: "#8B9C3A" }} />
+                  <Plus className="h-5 w-5 text-brand" />
                 </div>
-                <p className="text-sm font-medium" style={{ color: "#888896" }}>
+                <p className="text-sm font-medium text-muted">
                   Connect another platform
                 </p>
               </div>

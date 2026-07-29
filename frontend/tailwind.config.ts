@@ -50,20 +50,35 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // BrandCMD palette
+        // BrandCMD palette — resolved from the CSS variables in globals.css
+        // so the tokens have exactly one source of truth.
         brand: {
-          DEFAULT: "#8B9C3A",
-          light: "#A8BA48",
-          dim: "#4A5420",
+          DEFAULT: "var(--brand)",
+          light: "var(--brand-light)",
+          dim: "var(--brand-dim)",
         },
-        bg: {
-          DEFAULT: "#0A0A0C",
-          surface: "#111115",
-          surface2: "#18181E",
+        surface: {
+          DEFAULT: "var(--surface)",
+          2: "var(--surface-2)",
+          3: "var(--surface-3)",
         },
-        "border-2": "#363640",
-        twitch: "#9146FF",
-        youtube: "#FF0000",
+        line: {
+          DEFAULT: "var(--line)",
+          strong: "var(--line-strong)",
+        },
+        ink: {
+          DEFAULT: "var(--text)",
+          muted: "var(--text-muted)",
+          dim: "var(--text-dim)",
+          faint: "var(--text-faint)",
+        },
+        status: {
+          success: "var(--success)",
+          warning: "var(--warning)",
+          danger: "var(--danger)",
+        },
+        twitch: "var(--twitch)",
+        youtube: "var(--youtube)",
         platform: {
           youtube: "#FF0000",
           twitch: "#9146FF",

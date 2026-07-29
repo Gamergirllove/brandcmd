@@ -16,9 +16,9 @@ import { Loader2, Plus, Target, Trash2, Check, AlertCircle, X } from "lucide-rea
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  background: "#0A0A0C",
-  border: "1px solid #363640",
-  color: "#E8E8E8",
+  background: "var(--bg)",
+  border: "1px solid var(--line-strong)",
+  color: "var(--text)",
   borderRadius: "8px",
   padding: "8px 12px",
   fontSize: "14px",
@@ -47,8 +47,8 @@ function GoalCard({
     <div
       className="rounded-xl p-5"
       style={{
-        background: "#111115",
-        border: goal.completed ? "1px solid #8B9C3A" : "1px solid #2A2A34",
+        background: "var(--surface)",
+        border: goal.completed ? "1px solid var(--brand)" : "1px solid var(--line)",
         borderLeft: `2px solid ${config.color}`,
       }}
     >
@@ -61,10 +61,10 @@ function GoalCard({
             {config.name[0]}
           </div>
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#E8E8E8" }}>
+            <p className="text-sm font-semibold" style={{ color: "var(--text)" }}>
               {label.replace("X", formatNumber(goal.targetValue))}
             </p>
-            <p className="text-xs" style={{ color: "#555560" }}>
+            <p className="text-xs" style={{ color: "var(--text-dim)" }}>
               {config.name}
             </p>
           </div>
@@ -75,9 +75,9 @@ function GoalCard({
             <span
               className="flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
               style={{
-                background: "rgba(61,186,110,0.1)",
+                background: "var(--success-wash)",
                 border: "1px solid rgba(61,186,110,0.25)",
-                color: "#3DBA6E",
+                color: "var(--success)",
               }}
             >
               <Check className="h-3 w-3" /> Done
@@ -88,9 +88,9 @@ function GoalCard({
             disabled={busy}
             aria-label="Delete goal"
             className="transition-colors disabled:opacity-50"
-            style={{ color: "#555560" }}
-            onMouseOver={(e) => (e.currentTarget.style.color = "#E04545")}
-            onMouseOut={(e) => (e.currentTarget.style.color = "#555560")}
+            style={{ color: "var(--text-dim)" }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "var(--danger)")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           </button>
@@ -98,19 +98,19 @@ function GoalCard({
       </div>
 
       <div className="mb-1.5 flex items-baseline justify-between text-xs">
-        <span style={{ color: "#E8E8E8" }}>
+        <span style={{ color: "var(--text)" }}>
           <span className="text-base font-bold">{formatNumber(goal.currentValue)}</span>
-          <span style={{ color: "#555560" }}> / {formatNumber(goal.targetValue)}</span>
+          <span style={{ color: "var(--text-dim)" }}> / {formatNumber(goal.targetValue)}</span>
         </span>
-        <span style={{ color: "#A8BA48" }}>{pct.toFixed(0)}%</span>
+        <span style={{ color: "var(--brand-light)" }}>{pct.toFixed(0)}%</span>
       </div>
 
-      <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "#0A0A0C" }}>
+      <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "var(--bg)" }}>
         <div
           className="h-full rounded-full transition-all"
           style={{
             width: `${pct}%`,
-            background: goal.completed ? "#3DBA6E" : "#8B9C3A",
+            background: goal.completed ? "var(--success)" : "var(--brand)",
           }}
         />
       </div>
@@ -131,7 +131,7 @@ function GoalCard({
               setEditing(false);
             }}
             className="rounded-lg px-3 py-1.5 text-xs font-bold"
-            style={{ background: "#8B9C3A", color: "#000" }}
+            style={{ background: "var(--brand)", color: "#000" }}
           >
             Save
           </button>
@@ -141,7 +141,7 @@ function GoalCard({
               setEditing(false);
             }}
             aria-label="Cancel"
-            style={{ color: "#555560" }}
+            style={{ color: "var(--text-dim)" }}
           >
             <X className="h-4 w-4" />
           </button>
@@ -150,7 +150,7 @@ function GoalCard({
         <button
           onClick={() => setEditing(true)}
           className="mt-3 text-xs underline"
-          style={{ color: "#555560" }}
+          style={{ color: "var(--text-dim)" }}
         >
           Change target
         </button>
@@ -221,10 +221,10 @@ export default function GoalsPage() {
     <div className="max-w-3xl space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold" style={{ color: "#E8E8E8" }}>
+          <h1 className="text-xl font-bold" style={{ color: "var(--text)" }}>
             Goals
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#888896" }}>
+          <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
             Targets are checked against live platform data each time this page loads.
           </p>
         </div>
@@ -232,7 +232,7 @@ export default function GoalsPage() {
           <button
             onClick={() => setShowForm(true)}
             className="flex shrink-0 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold"
-            style={{ background: "#8B9C3A", color: "#000" }}
+            style={{ background: "var(--brand)", color: "#000" }}
           >
             <Plus className="h-4 w-4" />
             New goal
@@ -243,10 +243,10 @@ export default function GoalsPage() {
       {showForm && (
         <div
           className="space-y-4 rounded-xl p-5"
-          style={{ background: "#111115", border: "1px solid #363640" }}
+          style={{ background: "var(--surface)", border: "1px solid var(--line-strong)" }}
         >
           <div className="space-y-1.5">
-            <label className="text-sm font-medium" style={{ color: "#888896" }}>
+            <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
               Goal type
             </label>
             <select
@@ -254,11 +254,11 @@ export default function GoalsPage() {
               onChange={(e) => setGoalType(e.target.value as GoalType | "")}
               style={{ ...inputStyle, cursor: "pointer" }}
             >
-              <option value="" style={{ background: "#111115" }}>
+              <option value="" style={{ background: "var(--surface)" }}>
                 Select a goal…
               </option>
               {Object.values(GoalType).map((type) => (
-                <option key={type} value={type} style={{ background: "#111115" }}>
+                <option key={type} value={type} style={{ background: "var(--surface)" }}>
                   {GOAL_LABELS[type]}
                 </option>
               ))}
@@ -267,7 +267,7 @@ export default function GoalsPage() {
 
           {goalType && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium" style={{ color: "#888896" }}>
+              <label className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
                 Target
               </label>
               <input
@@ -282,7 +282,7 @@ export default function GoalsPage() {
           )}
 
           {platformMissing && (
-            <p className="flex items-center gap-1.5 text-xs" style={{ color: "#E0A545" }}>
+            <p className="flex items-center gap-1.5 text-xs" style={{ color: "var(--warning)" }}>
               <AlertCircle className="h-3.5 w-3.5 shrink-0" />
               {PLATFORM_CONFIGS[selectedPlatform!].name} isn&apos;t connected — this goal will sit
               at 0 until you{" "}
@@ -294,7 +294,7 @@ export default function GoalsPage() {
           )}
 
           {formError && (
-            <p className="flex items-center gap-1.5 text-sm" style={{ color: "#E04545" }}>
+            <p className="flex items-center gap-1.5 text-sm" style={{ color: "var(--danger)" }}>
               <AlertCircle className="h-4 w-4 shrink-0" />
               {formError}
             </p>
@@ -305,7 +305,7 @@ export default function GoalsPage() {
               onClick={handleCreate}
               disabled={!goalType || !targetValue || saving}
               className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold disabled:opacity-60"
-              style={{ background: "#8B9C3A", color: "#000" }}
+              style={{ background: "var(--brand)", color: "#000" }}
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               Create goal
@@ -316,7 +316,7 @@ export default function GoalsPage() {
                 setFormError(null);
               }}
               className="rounded-lg px-4 py-2 text-sm font-medium"
-              style={{ border: "1px solid #363640", color: "#888896" }}
+              style={{ border: "1px solid var(--line-strong)", color: "var(--text-muted)" }}
             >
               Cancel
             </button>
@@ -328,9 +328,9 @@ export default function GoalsPage() {
         <div
           className="rounded-xl px-4 py-3 text-sm"
           style={{
-            background: "rgba(224,69,69,0.08)",
+            background: "var(--danger-wash)",
             border: "1px solid rgba(224,69,69,0.3)",
-            color: "#E04545",
+            color: "var(--danger)",
           }}
         >
           {error}
@@ -343,25 +343,25 @@ export default function GoalsPage() {
             <div
               key={i}
               className="h-36 animate-pulse rounded-xl"
-              style={{ background: "#18181E" }}
+              style={{ background: "var(--surface-2)" }}
             />
           ))}
         </div>
       ) : goals.length === 0 ? (
         <div
           className="rounded-xl p-10 text-center"
-          style={{ background: "#111115", border: "1px dashed #363640" }}
+          style={{ background: "var(--surface)", border: "1px dashed var(--line-strong)" }}
         >
           <div
             className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full"
-            style={{ background: "#4A5420" }}
+            style={{ background: "var(--brand-dim)" }}
           >
-            <Target className="h-6 w-6" style={{ color: "#8B9C3A" }} />
+            <Target className="h-6 w-6" style={{ color: "var(--brand)" }} />
           </div>
-          <p className="font-semibold" style={{ color: "#E8E8E8" }}>
+          <p className="font-semibold" style={{ color: "var(--text)" }}>
             No goals yet
           </p>
-          <p className="mt-1 text-sm" style={{ color: "#888896" }}>
+          <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
             Set a follower or view target and BrandCMD will track it for you.
           </p>
         </div>

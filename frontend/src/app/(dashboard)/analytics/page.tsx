@@ -34,21 +34,21 @@ function MetricCard({
     <div
       className="rounded-xl p-4"
       style={{
-        background: "#111115",
-        border: "1px solid #2A2A34",
-        borderLeft: "2px solid #8B9C3A",
+        background: "var(--surface)",
+        border: "1px solid var(--line)",
+        borderLeft: "2px solid var(--brand)",
       }}
     >
-      <p className="text-[10px] uppercase tracking-wider" style={{ color: "#555560" }}>
+      <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>
         {label}
       </p>
-      <p className="mt-1 text-xl font-bold" style={{ color: "#E8E8E8" }}>
+      <p className="mt-1 text-xl font-bold" style={{ color: "var(--text)" }}>
         {value}
       </p>
       {delta !== undefined && delta !== null && (
         <div
           className="mt-1 flex items-center gap-0.5 text-xs font-medium"
-          style={{ color: delta >= 0 ? "#3DBA6E" : "#E04545" }}
+          style={{ color: delta >= 0 ? "var(--success)" : "var(--danger)" }}
         >
           {delta >= 0 ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
           {Math.abs(delta).toFixed(1)}%
@@ -89,11 +89,11 @@ function metricsFor(m: PlatformMetrics): { label: string; value: string; delta?:
 }
 
 const tooltipStyle = {
-  background: "#18181E",
-  border: "1px solid #363640",
+  background: "var(--surface-2)",
+  border: "1px solid var(--line-strong)",
   borderRadius: "8px",
   fontSize: "12px",
-  color: "#E8E8E8",
+  color: "var(--text)",
 };
 
 export default function AnalyticsPage() {
@@ -124,9 +124,9 @@ export default function AnalyticsPage() {
       <div
         className="rounded-xl px-5 py-4 text-sm"
         style={{
-          background: "rgba(224,69,69,0.08)",
+          background: "var(--danger-wash)",
           border: "1px solid rgba(224,69,69,0.3)",
-          color: "#E04545",
+          color: "var(--danger)",
         }}
       >
         Could not load analytics: {error}
@@ -138,18 +138,18 @@ export default function AnalyticsPage() {
     return (
       <div
         className="rounded-xl p-10 text-center"
-        style={{ background: "#111115", border: "1px dashed #363640" }}
+        style={{ background: "var(--surface)", border: "1px dashed var(--line-strong)" }}
       >
-        <p className="font-semibold" style={{ color: "#E8E8E8" }}>
+        <p className="font-semibold" style={{ color: "var(--text)" }}>
           Nothing to analyze yet
         </p>
-        <p className="mt-1 text-sm" style={{ color: "#888896" }}>
+        <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
           Connect a platform and your analytics will appear here.
         </p>
         <Link
           href="/connect"
           className="mt-5 inline-block rounded-lg px-5 py-2 text-sm font-bold"
-          style={{ background: "#8B9C3A", color: "#000" }}
+          style={{ background: "var(--brand)", color: "#000" }}
         >
           Connect a platform →
         </Link>
@@ -162,7 +162,7 @@ export default function AnalyticsPage() {
       {/* Platform selector */}
       <div
         className="flex flex-wrap items-center gap-1 rounded-lg p-1 w-fit"
-        style={{ background: "#111115", border: "1px solid #2A2A34" }}
+        style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
       >
         {connected.map((p) => {
           const cfg = PLATFORM_CONFIGS[p.platform];
@@ -179,12 +179,12 @@ export default function AnalyticsPage() {
                       color: cfg.color,
                       border: `1px solid ${cfg.color}4D`,
                     }
-                  : { color: "#555560", border: "1px solid transparent" }
+                  : { color: "var(--text-dim)", border: "1px solid transparent" }
               }
             >
               <span
                 className="h-2 w-2 rounded-full"
-                style={{ background: isActive ? cfg.color : "#363640" }}
+                style={{ background: isActive ? cfg.color : "var(--line-strong)" }}
               />
               {cfg.name}
             </button>
@@ -196,9 +196,9 @@ export default function AnalyticsPage() {
         <div
           className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
           style={{
-            background: "rgba(224,69,69,0.08)",
+            background: "var(--danger-wash)",
             border: "1px solid rgba(224,69,69,0.3)",
-            color: "#E04545",
+            color: "var(--danger)",
           }}
         >
           <AlertTriangle className="h-4 w-4 shrink-0" />
@@ -219,7 +219,7 @@ export default function AnalyticsPage() {
               <div
                 key={i}
                 className="h-24 animate-pulse rounded-xl"
-                style={{ background: "#18181E" }}
+                style={{ background: "var(--surface-2)" }}
               />
             ))
           : metricsFor(active).map((m) => (
@@ -230,15 +230,15 @@ export default function AnalyticsPage() {
       {/* Daily views */}
       <div
         className="rounded-xl p-5"
-        style={{ background: "#111115", border: "1px solid #2A2A34" }}
+        style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-semibold" style={{ color: "#E8E8E8" }}>
+          <h2 className="font-semibold" style={{ color: "var(--text)" }}>
             Daily views — {config?.name ?? "—"}
           </h2>
           <div
             className="flex items-center gap-1 rounded-lg p-0.5"
-            style={{ border: "1px solid #2A2A34" }}
+            style={{ border: "1px solid var(--line)" }}
           >
             {([7, 30, 90] as const).map((d) => (
               <button
@@ -247,8 +247,8 @@ export default function AnalyticsPage() {
                 className="rounded-md px-3 py-1 text-xs font-medium transition-colors"
                 style={
                   days === d
-                    ? { background: config?.color ?? "#8B9C3A", color: "#fff" }
-                    : { color: "#555560" }
+                    ? { background: config?.color ?? "var(--brand)", color: "#fff" }
+                    : { color: "var(--text-dim)" }
                 }
               >
                 {d}d
@@ -257,20 +257,20 @@ export default function AnalyticsPage() {
           </div>
         </div>
         {isLoading ? (
-          <div className="h-56 animate-pulse rounded-lg" style={{ background: "#18181E" }} />
+          <div className="h-56 animate-pulse rounded-lg" style={{ background: "var(--surface-2)" }} />
         ) : series.length > 0 ? (
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={series} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A2A34" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--line)" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 11, fill: "#555560" }}
+                tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                 tickLine={false}
                 axisLine={false}
                 interval={Math.max(Math.floor(series.length / 6), 0)}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: "#555560" }}
+                tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(v) => formatNumber(v)}
@@ -283,7 +283,7 @@ export default function AnalyticsPage() {
               <Line
                 type="monotone"
                 dataKey="views"
-                stroke={config?.color ?? "#8B9C3A"}
+                stroke={config?.color ?? "var(--brand)"}
                 strokeWidth={2}
                 dot={false}
               />
@@ -292,7 +292,7 @@ export default function AnalyticsPage() {
         ) : (
           <div
             className="flex h-56 items-center justify-center text-sm"
-            style={{ color: "#555560" }}
+            style={{ color: "var(--text-dim)" }}
           >
             No daily data for this platform in the last {days} days.
           </div>
@@ -302,42 +302,42 @@ export default function AnalyticsPage() {
       {/* Engagement breakdown */}
       <div
         className="rounded-xl p-5"
-        style={{ background: "#111115", border: "1px solid #2A2A34" }}
+        style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
       >
-        <h2 className="mb-4 font-semibold" style={{ color: "#E8E8E8" }}>
+        <h2 className="mb-4 font-semibold" style={{ color: "var(--text)" }}>
           Daily engagement breakdown
         </h2>
         {isLoading ? (
-          <div className="h-48 animate-pulse rounded-lg" style={{ background: "#18181E" }} />
+          <div className="h-48 animate-pulse rounded-lg" style={{ background: "var(--surface-2)" }} />
         ) : series.length > 0 ? (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={series} margin={{ top: 0, right: 8, bottom: 0, left: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2A2A34" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--line)" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 11, fill: "#555560" }}
+                tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                 tickLine={false}
                 axisLine={false}
                 interval={Math.max(Math.floor(series.length / 6), 0)}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: "#555560" }}
+                tick={{ fontSize: 11, fill: "var(--text-dim)" }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(v) => formatNumber(v)}
                 width={48}
               />
               <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => formatNumber(v)} />
-              <Legend wrapperStyle={{ fontSize: "11px", color: "#888896" }} />
-              <Bar dataKey="likes" stackId="e" fill="#8B9C3A" name="Likes" />
-              <Bar dataKey="comments" stackId="e" fill="#4A5420" name="Comments" />
-              <Bar dataKey="shares" stackId="e" fill="#A8BA48" name="Shares" radius={[4, 4, 0, 0]} />
+              <Legend wrapperStyle={{ fontSize: "11px", color: "var(--text-muted)" }} />
+              <Bar dataKey="likes" stackId="e" fill="var(--brand)" name="Likes" />
+              <Bar dataKey="comments" stackId="e" fill="var(--brand-dim)" name="Comments" />
+              <Bar dataKey="shares" stackId="e" fill="var(--brand-light)" name="Shares" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <div
             className="flex h-48 items-center justify-center text-sm"
-            style={{ color: "#555560" }}
+            style={{ color: "var(--text-dim)" }}
           >
             No engagement recorded in this period.
           </div>

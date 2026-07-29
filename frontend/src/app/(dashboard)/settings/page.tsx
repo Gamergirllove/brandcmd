@@ -32,16 +32,16 @@ function SectionCard({
     <div
       className="rounded-xl p-6"
       style={{
-        background: danger ? "rgba(224,69,69,0.05)" : "#111115",
-        border: danger ? "1px solid rgba(224,69,69,0.2)" : "1px solid #2A2A34",
+        background: danger ? "var(--danger-wash)" : "var(--surface)",
+        border: danger ? "1px solid rgba(224,69,69,0.2)" : "1px solid var(--line)",
       }}
     >
-      <div className="mb-4 pb-3" style={{ borderBottom: "1px solid #2A2A34" }}>
-        <h2 className="font-semibold" style={{ color: danger ? "#E04545" : "#E8E8E8" }}>
+      <div className="mb-4 pb-3" style={{ borderBottom: "1px solid var(--line)" }}>
+        <h2 className="font-semibold" style={{ color: danger ? "var(--danger)" : "var(--text)" }}>
           {title}
         </h2>
         {description && (
-          <p className="mt-0.5 text-sm" style={{ color: "#888896" }}>
+          <p className="mt-0.5 text-sm" style={{ color: "var(--text-muted)" }}>
             {description}
           </p>
         )}
@@ -68,7 +68,7 @@ function Toggle({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className="relative inline-flex h-5 w-9 items-center rounded-full transition-colors disabled:opacity-50"
-      style={{ background: checked ? "#8B9C3A" : "#2A2A34" }}
+      style={{ background: checked ? "var(--brand)" : "var(--line)" }}
     >
       <span
         className="inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform"
@@ -79,9 +79,9 @@ function Toggle({
 }
 
 const inputStyle = {
-  background: "#0A0A0C",
-  border: "1px solid #363640",
-  color: "#E8E8E8",
+  background: "var(--bg)",
+  border: "1px solid var(--line-strong)",
+  color: "var(--text)",
   width: "100%",
   borderRadius: "8px",
   padding: "8px 12px",
@@ -215,22 +215,22 @@ export default function SettingsPage() {
         <div className="mb-5 flex items-center gap-4">
           <div
             className="flex h-14 w-14 items-center justify-center rounded-full text-lg font-bold"
-            style={{ background: "#4A5420", border: "1px solid #8B9C3A", color: "#A8BA48" }}
+            style={{ background: "var(--brand-dim)", border: "1px solid var(--brand)", color: "var(--brand-light)" }}
           >
             {userInitials}
           </div>
           <div>
-            <p className="font-medium" style={{ color: "#E8E8E8" }}>
+            <p className="font-medium" style={{ color: "var(--text)" }}>
               {displayName || "Creator"}
             </p>
             {creatorHandle && (
-              <p className="text-sm" style={{ color: "#888896" }}>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
                 @{creatorHandle}
               </p>
             )}
             <span
               className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium"
-              style={{ background: "#18181E", border: "1px solid #363640", color: "#555560" }}
+              style={{ background: "var(--surface-2)", border: "1px solid var(--line-strong)", color: "var(--text-dim)" }}
             >
               Free plan
             </span>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
         <form onSubmit={saveProfile} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="displayName" style={{ color: "#888896" }}>
+              <Label htmlFor="displayName" style={{ color: "var(--text-muted)" }}>
                 Display name
               </Label>
               <input
@@ -249,12 +249,12 @@ export default function SettingsPage() {
                 placeholder="Your name"
                 disabled={loadingProfile}
                 style={inputStyle}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="creatorHandle" style={{ color: "#888896" }}>
+              <Label htmlFor="creatorHandle" style={{ color: "var(--text-muted)" }}>
                 Creator handle
               </Label>
               <input
@@ -264,13 +264,13 @@ export default function SettingsPage() {
                 placeholder="tasha_creates"
                 disabled={loadingProfile}
                 style={inputStyle}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8B9C3A")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
               />
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="email" style={{ color: "#888896" }}>
+            <Label htmlFor="email" style={{ color: "var(--text-muted)" }}>
               Email
             </Label>
             <input
@@ -279,17 +279,17 @@ export default function SettingsPage() {
               disabled
               style={{ ...inputStyle, opacity: 0.5, cursor: "not-allowed" }}
             />
-            <p className="text-xs" style={{ color: "#555560" }}>
+            <p className="text-xs" style={{ color: "var(--text-dim)" }}>
               Email changes require re-authentication. Contact support.
             </p>
           </div>
           {profileError && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: "#E04545" }}>
+            <div className="flex items-center gap-2 text-sm" style={{ color: "var(--danger)" }}>
               <AlertCircle className="h-4 w-4" /> {profileError}
             </div>
           )}
           {profileSuccess && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: "#3DBA6E" }}>
+            <div className="flex items-center gap-2 text-sm" style={{ color: "var(--success)" }}>
               <CheckCircle2 className="h-4 w-4" /> Profile saved.
             </div>
           )}
@@ -297,9 +297,9 @@ export default function SettingsPage() {
             type="submit"
             disabled={savingProfile || loadingProfile}
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-colors disabled:opacity-60"
-            style={{ background: "#8B9C3A", color: "#000" }}
-            onMouseOver={(e) => !savingProfile && (e.currentTarget.style.background = "#A8BA48")}
-            onMouseOut={(e) => (e.currentTarget.style.background = "#8B9C3A")}
+            style={{ background: "var(--brand)", color: "#000" }}
+            onMouseOver={(e) => !savingProfile && (e.currentTarget.style.background = "var(--brand-light)")}
+            onMouseOut={(e) => (e.currentTarget.style.background = "var(--brand)")}
           >
             {savingProfile && <Loader2 className="h-4 w-4 animate-spin" />}
             Save changes
@@ -319,9 +319,9 @@ export default function SettingsPage() {
               onClick={handleDisconnectAll}
               disabled={disconnectingAll}
               className="flex items-center gap-1.5 text-xs transition-colors"
-              style={{ color: "#555560" }}
-              onMouseOver={(e) => (e.currentTarget.style.color = "#E04545")}
-              onMouseOut={(e) => (e.currentTarget.style.color = "#555560")}
+              style={{ color: "var(--text-dim)" }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "var(--danger)")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
             >
               {disconnectingAll ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -339,22 +339,22 @@ export default function SettingsPage() {
             ))}
           </div>
         ) : connectedPlatforms.length === 0 ? (
-          <p className="py-4 text-center text-sm" style={{ color: "#555560" }}>
+          <p className="py-4 text-center text-sm" style={{ color: "var(--text-dim)" }}>
             No platforms connected.{" "}
-            <a href="/connect" className="font-medium hover:underline" style={{ color: "#8B9C3A" }}>
+            <a href="/connect" className="font-medium hover:underline" style={{ color: "var(--brand)" }}>
               Connect one
             </a>
             .
           </p>
         ) : (
-          <ul style={{ borderTop: "1px solid #2A2A34" }}>
+          <ul style={{ borderTop: "1px solid var(--line)" }}>
             {connectedPlatforms.map((connection) => {
               const config = PLATFORM_CONFIGS[connection.platform];
               return (
                 <li
                   key={connection.platform}
                   className="flex items-center justify-between py-3"
-                  style={{ borderBottom: "1px solid #1A1A22" }}
+                  style={{ borderBottom: "1px solid var(--surface-3)" }}
                 >
                   <div className="flex items-center gap-3">
                     <span
@@ -364,13 +364,13 @@ export default function SettingsPage() {
                       {config.name.slice(0, 2).toUpperCase()}
                     </span>
                     <div>
-                      <p className="text-sm font-medium" style={{ color: "#E8E8E8" }}>
+                      <p className="text-sm font-medium" style={{ color: "var(--text)" }}>
                         {config.name}
                       </p>
-                      <span className="flex items-center gap-1 text-xs" style={{ color: "#3DBA6E" }}>
+                      <span className="flex items-center gap-1 text-xs" style={{ color: "var(--success)" }}>
                         <span
                           className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: "#3DBA6E" }}
+                          style={{ background: "var(--success)" }}
                         />
                         {connection.username ? `@${connection.username}` : "Connected"}
                       </span>
@@ -380,9 +380,9 @@ export default function SettingsPage() {
                     onClick={() => handleDisconnectPlatform(connection.platform)}
                     disabled={disconnectingPlatform === connection.platform}
                     className="text-xs disabled:opacity-50 transition-colors"
-                    style={{ color: "#555560" }}
-                    onMouseOver={(e) => (e.currentTarget.style.color = "#E04545")}
-                    onMouseOut={(e) => (e.currentTarget.style.color = "#555560")}
+                    style={{ color: "var(--text-dim)" }}
+                    onMouseOver={(e) => (e.currentTarget.style.color = "var(--danger)")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
                   >
                     {disconnectingPlatform === connection.platform ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -424,10 +424,10 @@ export default function SettingsPage() {
           ).map((item) => (
             <div key={item.key} className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium" style={{ color: "#E8E8E8" }}>
+                <p className="text-sm font-medium" style={{ color: "var(--text)" }}>
                   {item.label}
                 </p>
-                <p className="text-xs" style={{ color: "#555560" }}>
+                <p className="text-xs" style={{ color: "var(--text-dim)" }}>
                   {item.description}
                 </p>
               </div>
@@ -446,14 +446,14 @@ export default function SettingsPage() {
         <button
           onClick={handleSignOut}
           className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
-          style={{ border: "1px solid #363640", color: "#888896", background: "transparent" }}
+          style={{ border: "1px solid var(--line-strong)", color: "var(--text-muted)", background: "transparent" }}
           onMouseOver={(e) => {
             e.currentTarget.style.borderColor = "rgba(224,69,69,0.4)";
-            e.currentTarget.style.color = "#E04545";
+            e.currentTarget.style.color = "var(--danger)";
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.borderColor = "#363640";
-            e.currentTarget.style.color = "#888896";
+            e.currentTarget.style.borderColor = "var(--line-strong)";
+            e.currentTarget.style.color = "var(--text-muted)";
           }}
         >
           <LogOut className="h-4 w-4" />
@@ -469,9 +469,9 @@ export default function SettingsPage() {
       >
         <div className="space-y-3">
           <div className="space-y-1.5">
-            <Label htmlFor="confirmDelete" style={{ color: "#888896" }}>
+            <Label htmlFor="confirmDelete" style={{ color: "var(--text-muted)" }}>
               Type your email{" "}
-              <span className="font-mono text-xs" style={{ color: "#555560" }}>
+              <span className="font-mono text-xs" style={{ color: "var(--text-dim)" }}>
                 {userEmail}
               </span>{" "}
               to confirm
@@ -482,12 +482,12 @@ export default function SettingsPage() {
               onChange={(e) => setConfirmDelete(e.target.value)}
               placeholder={userEmail}
               style={inputStyle}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#E04545")}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#363640")}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "var(--danger)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line-strong)")}
             />
           </div>
           {deleteError && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: "#E04545" }}>
+            <div className="flex items-center gap-2 text-sm" style={{ color: "var(--danger)" }}>
               <AlertCircle className="h-4 w-4" /> {deleteError}
             </div>
           )}
@@ -495,11 +495,11 @@ export default function SettingsPage() {
             disabled={confirmDelete !== userEmail || deletingAccount}
             onClick={handleDeleteAccount}
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors disabled:opacity-50"
-            style={{ background: "#E04545" }}
+            style={{ background: "var(--danger)" }}
             onMouseOver={(e) =>
-              confirmDelete === userEmail && (e.currentTarget.style.background = "#c73b3b")
+              confirmDelete === userEmail && (e.currentTarget.style.background = "var(--danger-strong)")
             }
-            onMouseOut={(e) => (e.currentTarget.style.background = "#E04545")}
+            onMouseOut={(e) => (e.currentTarget.style.background = "var(--danger)")}
           >
             {deletingAccount ? (
               <Loader2 className="h-4 w-4 animate-spin" />

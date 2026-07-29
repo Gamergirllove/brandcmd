@@ -2,125 +2,468 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Design tokens
+
+   Every colour in the app resolves here. Nothing should hardcode a hex
+   value in a component — change a token and the whole surface follows.
+
+   Two naming schemes coexist deliberately:
+     --bg / --surface / --brand ...  the BrandCMD palette, used directly
+     --background / --card / ...     HSL triplets shadcn's primitives need
+   The second set is derived from the first; keep them in sync.
+   ========================================================================== */
+
 :root {
-  --bg: #0A0A0C;
+  /* Surfaces, darkest to lightest */
+  --bg: #0a0a0c;
   --surface: #111115;
-  --surface2: #18181E;
-  --border: #2A2A34;
-  --border2: #363640;
-  --brand: #8B9C3A;
-  --brand-light: #A8BA48;
-  --brand-dim: #4A5420;
-  --brand-glow: rgba(139,156,58,0.12);
-  --text-primary: #E8E8E8;
+  --surface-2: #18181e;
+  --surface-3: #1f1f27;
+
+  /* Lines */
+  --line: #2a2a34;
+  --line-strong: #363640;
+
+  /* Brand — olive/military HUD */
+  --brand: #8b9c3a;
+  --brand-light: #a8ba48;
+  --brand-dim: #4a5420;
+  --brand-wash: rgba(139, 156, 58, 0.12);
+  --brand-wash-strong: rgba(139, 156, 58, 0.2);
+
+  /* Text */
+  --text: #e8e8e8;
   --text-muted: #888896;
   --text-dim: #555560;
-  --twitch: #9146FF;
-  --youtube: #FF0000;
-  --success: #3DBA6E;
-  --danger: #E04545;
+  --text-faint: #3d3d48;
 
-  /* shadcn compat — keep these so UI components don't break */
-  --background: 0 0% 4%;
-  --foreground: 0 0% 91%;
-  --card: 240 5% 7%;
-  --card-foreground: 0 0% 91%;
-  --popover: 240 5% 7%;
-  --popover-foreground: 0 0% 91%;
-  --primary: 72 43% 42%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 240 5% 10%;
-  --secondary-foreground: 0 0% 91%;
-  --muted: 240 5% 12%;
-  --muted-foreground: 240 5% 53%;
-  --accent: 72 43% 20%;
-  --accent-foreground: 72 43% 66%;
-  --destructive: 0 64% 57%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 240 5% 16%;
-  --input: 240 5% 21%;
-  --ring: 72 43% 42%;
+  /* Status */
+  --success: #3dba6e;
+  --success-wash: rgba(61, 186, 110, 0.1);
+  --warning: #e0a545;
+  --warning-wash: rgba(224, 165, 69, 0.1);
+  --danger: #e04545;
+  --danger-strong: #c73b3b;
+  --danger-wash: rgba(224, 69, 69, 0.08);
+
+  /* Platform brand colours */
+  --twitch: #9146ff;
+  --youtube: #ff0000;
+
+  /* Motion — one duration, so transitions feel like one system */
+  --speed: 150ms;
+
   --radius: 0.5rem;
   --sidebar-width: 220px;
+
+  /* --- shadcn compatibility (HSL triplets, no hsl() wrapper) --- */
+  --background: 240 6% 4%;
+  --foreground: 0 0% 91%;
+  --card: 240 7% 7%;
+  --card-foreground: 0 0% 91%;
+  --popover: 240 7% 7%;
+  --popover-foreground: 0 0% 91%;
+  --primary: 72 45% 42%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 240 8% 10%;
+  --secondary-foreground: 0 0% 91%;
+  --muted: 240 8% 12%;
+  --muted-foreground: 240 6% 55%;
+  --accent: 72 45% 22%;
+  --accent-foreground: 72 45% 63%;
+  --destructive: 0 71% 58%;
+  --destructive-foreground: 0 0% 100%;
+  /* Matches --line. Previously this key was declared twice and the
+     BrandCMD hex lost to the shadcn triplet, so `border-border` rendered
+     the wrong colour everywhere. */
+  --border: 240 10% 18%;
+  --input: 240 9% 23%;
+  --ring: 72 45% 42%;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-  html, body {
-    background: #0A0A0C;
-    color: #E8E8E8;
-  }
+
+  html,
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Visible keyboard focus everywhere. Inline styles could never express
+     this, which is why it was missing before. */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--brand-dim);
+    color: var(--text);
+  }
+
+  /* Dark form controls, including the native select popup */
+  select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors;
-    background: #8B9C3A;
-    color: #000;
-  }
-  .btn-primary:hover {
-    background: #A8BA48;
-  }
-  .btn-primary:disabled {
-    @apply opacity-60 cursor-not-allowed;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors;
-    border: 1px solid #363640;
-    color: #888896;
-    background: transparent;
-  }
-  .btn-secondary:hover {
-    border-color: #4A5420;
-    color: #E8E8E8;
-  }
+  /* ---------------------------------------------------------------- Surfaces */
 
   .card {
-    @apply rounded-xl p-4;
-    background: #111115;
-    border: 1px solid #2A2A34;
+    @apply rounded-xl;
+    background: var(--surface);
+    border: 1px solid var(--line);
   }
 
-  .stat-card {
-    @apply card flex flex-col;
+  /* Left brand rule — the dashboard stat treatment */
+  .card-accent {
+    border-left: 2px solid var(--brand);
   }
 
-  .platform-badge {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  /* Top rule in a platform's own colour. Set --accent-color per instance. */
+  .card-topped {
+    border-top: 2px solid var(--accent-color, var(--brand));
   }
 
-  .nav-active {
-    background: rgba(74,84,32,0.2);
-    color: #A8BA48;
-    border: 1px solid #4A5420;
+  .card-inset {
+    @apply rounded-lg;
+    background: var(--bg);
+    border: 1px solid var(--line);
   }
 
-  /* HUD corner brackets for platform cards */
-  .hud-corners {
+  .card-dashed {
+    @apply rounded-xl;
+    background: transparent;
+    border: 1px dashed var(--line-strong);
+    transition: border-color var(--speed), background var(--speed);
+  }
+  .card-dashed:hover {
+    border-color: var(--brand);
+    background: var(--brand-wash);
+  }
+
+  /* HUD corner brackets. Two pseudo-elements draw all four corners via
+     opposing border pairs — no wrapper divs, unlike the JS version. */
+  .hud {
     position: relative;
   }
-  .hud-corners::before,
-  .hud-corners::after {
-    content: '';
+  .hud::before,
+  .hud::after {
+    content: "";
     position: absolute;
     width: 10px;
     height: 10px;
-    border-color: #8B9C3A;
+    border-color: var(--brand);
     border-style: solid;
     opacity: 0.4;
+    pointer-events: none;
+  }
+  .hud::before {
+    top: 6px;
+    left: 6px;
+    border-width: 1px 0 0 1px;
+    box-shadow: none;
+  }
+  .hud::after {
+    bottom: 6px;
+    right: 6px;
+    border-width: 0 1px 1px 0;
+  }
+  /* Opposite pair, drawn on an inner wrapper when all four are wanted */
+  .hud-full::before,
+  .hud-full::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--brand);
+    border-style: solid;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .hud-full::before {
+    top: 6px;
+    right: 6px;
+    border-width: 1px 1px 0 0;
+  }
+  .hud-full::after {
+    bottom: 6px;
+    left: 6px;
+    border-width: 0 0 1px 1px;
+  }
+
+  /* ---------------------------------------------------------------- Buttons */
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold;
+    transition: background var(--speed), border-color var(--speed),
+      color var(--speed), opacity var(--speed);
+    cursor: pointer;
+  }
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn font-bold;
+    background: var(--brand);
+    color: #000;
+    border: 1px solid var(--brand);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--brand-light);
+    border-color: var(--brand-light);
+  }
+
+  .btn-secondary {
+    @apply btn;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--text-muted);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--brand-dim);
+    color: var(--text);
+  }
+
+  .btn-danger {
+    @apply btn;
+    background: var(--danger);
+    color: #fff;
+    border: 1px solid var(--danger);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background: #c73b3b;
+  }
+
+  /* Neutral button that turns destructive on hover — disconnect, sign out */
+  .btn-quiet-danger {
+    @apply btn;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--text-muted);
+  }
+  .btn-quiet-danger:hover:not(:disabled) {
+    border-color: rgba(224, 69, 69, 0.4);
+    color: var(--danger);
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* ---------------------------------------------------------------- Forms */
+
+  .field {
+    @apply w-full rounded-lg px-3 py-2 text-sm;
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    outline: none;
+    transition: border-color var(--speed);
+  }
+  .field::placeholder {
+    color: var(--text-dim);
+  }
+  .field:hover:not(:disabled) {
+    border-color: var(--line-strong);
+  }
+  .field:focus {
+    border-color: var(--brand);
+  }
+  .field:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .field-label {
+    @apply text-sm font-medium;
+    color: var(--text-muted);
+  }
+
+  /* ---------------------------------------------------------------- Nav */
+
+  .nav-link {
+    @apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    transition: background var(--speed), color var(--speed),
+      border-color var(--speed);
+  }
+  .nav-link:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .nav-link-active {
+    background: var(--brand-wash-strong);
+    color: var(--brand-light);
+    border-color: var(--brand-dim);
+  }
+  .nav-link-active:hover {
+    background: var(--brand-wash-strong);
+    color: var(--brand-light);
+  }
+  .nav-link-disabled {
+    @apply flex cursor-default items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium;
+    color: var(--text-faint);
+    border: 1px solid transparent;
+  }
+
+  /* ---------------------------------------------------------------- Pills */
+
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+  .pill-neutral {
+    @apply pill;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+  }
+  .pill-brand {
+    @apply pill;
+    background: var(--brand-wash);
+    border: 1px solid var(--brand-dim);
+    color: var(--brand-light);
+  }
+  .pill-success {
+    @apply pill;
+    background: var(--success-wash);
+    border: 1px solid rgba(61, 186, 110, 0.25);
+    color: var(--success);
+  }
+  .pill-warning {
+    @apply pill;
+    background: var(--warning-wash);
+    border: 1px solid rgba(224, 165, 69, 0.25);
+    color: var(--warning);
+  }
+  .pill-danger {
+    @apply pill;
+    background: var(--danger-wash);
+    border: 1px solid rgba(224, 69, 69, 0.3);
+    color: var(--danger);
+  }
+
+  /* ---------------------------------------------------------------- Alerts */
+
+  .alert {
+    @apply flex items-start gap-2 rounded-lg px-4 py-3 text-sm;
+  }
+  .alert-success {
+    @apply alert;
+    background: var(--success-wash);
+    border: 1px solid rgba(61, 186, 110, 0.3);
+    color: var(--success);
+  }
+  .alert-warning {
+    @apply alert;
+    background: var(--warning-wash);
+    border: 1px solid rgba(224, 165, 69, 0.3);
+    color: var(--warning);
+  }
+  .alert-danger {
+    @apply alert;
+    background: var(--danger-wash);
+    border: 1px solid rgba(224, 69, 69, 0.3);
+    color: var(--danger);
+  }
+
+  /* ---------------------------------------------------------------- Text */
+
+  .label-caps {
+    @apply text-[10px] uppercase tracking-wider;
+    color: var(--text-dim);
+  }
+  .text-muted {
+    color: var(--text-muted);
+  }
+  .text-dim {
+    color: var(--text-dim);
+  }
+  .text-brand {
+    color: var(--brand);
+  }
+  .heading {
+    @apply font-semibold;
+    color: var(--text);
+  }
+
+  /* ---------------------------------------------------------------- Misc */
+
+  .skeleton {
+    @apply animate-pulse rounded;
+    background: var(--surface-2);
+  }
+
+  .divider {
+    border-top: 1px solid var(--line);
+  }
+
+  /* Segmented control — range tabs, platform tabs */
+  .segmented {
+    @apply flex w-fit items-center gap-1 rounded-lg p-1;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .segmented-item {
+    @apply rounded-md px-4 py-1.5 text-sm font-medium;
+    color: var(--text-dim);
+    border: 1px solid transparent;
+    transition: background var(--speed), color var(--speed),
+      border-color var(--speed);
+    cursor: pointer;
+  }
+  .segmented-item:hover {
+    color: var(--text-muted);
+  }
+  .segmented-item-active,
+  .segmented-item-active:hover {
+    background: var(--brand-wash-strong);
+    color: var(--brand-light);
+    border-color: var(--brand-dim);
+  }
+
+  .progress-track {
+    @apply h-1.5 w-full overflow-hidden rounded-full;
+    background: var(--bg);
+  }
+  .progress-fill {
+    @apply h-full rounded-full;
+    transition: width 400ms ease-out;
+    background: var(--brand);
+  }
+  .progress-fill-done {
+    background: var(--success);
   }
 }
 
-/* Thin scrollbar */
+/* Thin scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2A2A34 transparent;
+  scrollbar-color: var(--line) transparent;
 }
 *::-webkit-scrollbar {
   width: 6px;
@@ -130,9 +473,9 @@
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #2A2A34;
+  background-color: var(--line);
   border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #363640;
+  background-color: var(--line-strong);
 }

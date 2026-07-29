@@ -105,10 +105,10 @@ function ConnectPageInner() {
   return (
     <div className="max-w-3xl space-y-8">
       <div>
-        <h1 className="text-xl font-bold" style={{ color: "#E8E8E8" }}>
+        <h1 className="text-xl font-bold" style={{ color: "var(--text)" }}>
           Connected Platforms
         </h1>
-        <p className="mt-1 text-sm" style={{ color: "#888896" }}>
+        <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
           Connect your creator accounts to start tracking analytics.
         </p>
       </div>
@@ -119,14 +119,14 @@ function ConnectPageInner() {
           style={
             message.kind === "ok"
               ? {
-                  background: "rgba(61,186,110,0.08)",
+                  background: "var(--success-wash)",
                   border: "1px solid rgba(61,186,110,0.3)",
-                  color: "#3DBA6E",
+                  color: "var(--success)",
                 }
               : {
-                  background: "rgba(224,69,69,0.08)",
+                  background: "var(--danger-wash)",
                   border: "1px solid rgba(224,69,69,0.3)",
-                  color: "#E04545",
+                  color: "var(--danger)",
                 }
           }
         >
@@ -145,7 +145,7 @@ function ConnectPageInner() {
             <div
               key={i}
               className="h-16 animate-pulse rounded-xl"
-              style={{ background: "#18181E" }}
+              style={{ background: "var(--surface-2)" }}
             />
           ))}
         </div>
@@ -155,16 +155,16 @@ function ConnectPageInner() {
           {connectedList.length > 0 && (
             <section>
               <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4" style={{ color: "#3DBA6E" }} />
-                <h2 className="text-sm font-semibold" style={{ color: "#E8E8E8" }}>
+                <CheckCircle2 className="h-4 w-4" style={{ color: "var(--success)" }} />
+                <h2 className="text-sm font-semibold" style={{ color: "var(--text)" }}>
                   Connected
                 </h2>
                 <span
                   className="rounded-full px-2 py-0.5 text-xs font-medium"
                   style={{
-                    background: "rgba(61,186,110,0.1)",
+                    background: "var(--success-wash)",
                     border: "1px solid rgba(61,186,110,0.2)",
-                    color: "#3DBA6E",
+                    color: "var(--success)",
                   }}
                 >
                   {connectedList.length} active
@@ -178,8 +178,8 @@ function ConnectPageInner() {
                       key={connection.platform}
                       className="flex items-center justify-between rounded-xl px-4 py-3"
                       style={{
-                        background: "rgba(74,84,32,0.1)",
-                        border: "1px solid #8B9C3A",
+                        background: "var(--brand-wash)",
+                        border: "1px solid var(--brand)",
                       }}
                     >
                       <div className="flex items-center gap-3">
@@ -190,19 +190,19 @@ function ConnectPageInner() {
                           {config.name[0]}
                         </div>
                         <div>
-                          <p className="font-medium" style={{ color: "#E8E8E8" }}>
+                          <p className="font-medium" style={{ color: "var(--text)" }}>
                             {config.name}
                           </p>
                           <div className="flex items-center gap-2 text-xs">
-                            <span className="flex items-center gap-1" style={{ color: "#3DBA6E" }}>
+                            <span className="flex items-center gap-1" style={{ color: "var(--success)" }}>
                               <span
                                 className="h-1.5 w-1.5 rounded-full"
-                                style={{ background: "#3DBA6E" }}
+                                style={{ background: "var(--success)" }}
                               />
                               Connected
                             </span>
                             {connection.username && (
-                              <span style={{ color: "#555560" }}>· @{connection.username}</span>
+                              <span style={{ color: "var(--text-dim)" }}>· @{connection.username}</span>
                             )}
                           </div>
                         </div>
@@ -212,17 +212,17 @@ function ConnectPageInner() {
                         disabled={disconnecting === connection.platform}
                         className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50"
                         style={{
-                          border: "1px solid #363640",
-                          color: "#888896",
+                          border: "1px solid var(--line-strong)",
+                          color: "var(--text-muted)",
                           background: "transparent",
                         }}
                         onMouseOver={(e) => {
                           e.currentTarget.style.borderColor = "rgba(224,69,69,0.4)";
-                          e.currentTarget.style.color = "#E04545";
+                          e.currentTarget.style.color = "var(--danger)";
                         }}
                         onMouseOut={(e) => {
-                          e.currentTarget.style.borderColor = "#363640";
-                          e.currentTarget.style.color = "#888896";
+                          e.currentTarget.style.borderColor = "var(--line-strong)";
+                          e.currentTarget.style.color = "var(--text-muted)";
                         }}
                       >
                         {disconnecting === connection.platform ? (
@@ -241,7 +241,7 @@ function ConnectPageInner() {
           {/* Available to connect */}
           {available.length > 0 && (
             <section>
-              <h2 className="mb-3 text-sm font-semibold" style={{ color: "#E8E8E8" }}>
+              <h2 className="mb-3 text-sm font-semibold" style={{ color: "var(--text)" }}>
                 {connectedList.length > 0 ? "Available to connect" : "Connect a platform"}
               </h2>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -251,7 +251,7 @@ function ConnectPageInner() {
                     <div
                       key={p.id}
                       className="rounded-xl p-4"
-                      style={{ background: "#111115", border: "1px solid #2A2A34" }}
+                      style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
                     >
                       <div className="mb-3 flex items-center gap-3">
                         <div
@@ -260,22 +260,22 @@ function ConnectPageInner() {
                         >
                           {config.name[0]}
                         </div>
-                        <p className="font-semibold" style={{ color: "#E8E8E8" }}>
+                        <p className="font-semibold" style={{ color: "var(--text)" }}>
                           {config.name}
                         </p>
                       </div>
-                      <p className="mb-4 text-xs" style={{ color: "#888896" }}>
+                      <p className="mb-4 text-xs" style={{ color: "var(--text-muted)" }}>
                         {p.description}
                       </p>
                       <button
                         onClick={() => handleConnect(p.id)}
                         disabled={connecting === p.id}
                         className="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-sm font-bold transition-colors disabled:opacity-60"
-                        style={{ background: "#8B9C3A", color: "#000" }}
+                        style={{ background: "var(--brand)", color: "#000" }}
                         onMouseOver={(e) =>
-                          !connecting && (e.currentTarget.style.background = "#A8BA48")
+                          !connecting && (e.currentTarget.style.background = "var(--brand-light)")
                         }
-                        onMouseOut={(e) => (e.currentTarget.style.background = "#8B9C3A")}
+                        onMouseOut={(e) => (e.currentTarget.style.background = "var(--brand)")}
                       >
                         {connecting === p.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -294,10 +294,10 @@ function ConnectPageInner() {
           {/* Supported by the API, but this deployment has no credentials for them */}
           {unconfigured.length > 0 && (
             <section>
-              <h2 className="mb-3 text-sm font-semibold" style={{ color: "#555560" }}>
+              <h2 className="mb-3 text-sm font-semibold" style={{ color: "var(--text-dim)" }}>
                 Needs OAuth credentials
               </h2>
-              <p className="mb-3 text-xs" style={{ color: "#555560" }}>
+              <p className="mb-3 text-xs" style={{ color: "var(--text-dim)" }}>
                 These integrations are built and ready — add the platform&apos;s client ID and
                 secret to the backend environment to enable them.
               </p>
@@ -309,9 +309,9 @@ function ConnectPageInner() {
                       key={p.id}
                       className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs"
                       style={{
-                        background: "#0A0A0C",
-                        border: "1px solid #2A2A34",
-                        color: "#888896",
+                        background: "var(--bg)",
+                        border: "1px solid var(--line)",
+                        color: "var(--text-muted)",
                       }}
                     >
                       <span
@@ -330,7 +330,7 @@ function ConnectPageInner() {
 
       {/* Roadmap */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold" style={{ color: "#555560" }}>
+        <h2 className="mb-3 text-sm font-semibold" style={{ color: "var(--text-dim)" }}>
           On the roadmap
         </h2>
         <div className="flex flex-wrap gap-2">
@@ -341,9 +341,9 @@ function ConnectPageInner() {
                 key={id}
                 className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs"
                 style={{
-                  background: "#0A0A0C",
-                  border: "1px solid #2A2A34",
-                  color: "#555560",
+                  background: "var(--bg)",
+                  border: "1px solid var(--line)",
+                  color: "var(--text-dim)",
                 }}
               >
                 <span
