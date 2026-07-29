@@ -88,8 +88,8 @@ Register this exact URL with each provider:
 ${BACKEND_URL}/connect/<platform>/callback
 ```
 
-For example `https://brandcmd-backend.onrender.com/connect/twitch/callback`.
-It must match byte-for-byte at both authorize and exchange time.
+For example `https://<your-backend-domain>/connect/twitch/callback`. It must
+match byte-for-byte at both authorize and exchange time.
 
 ---
 

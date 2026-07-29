@@ -4,6 +4,11 @@
 .env.local
 .env.*.local
 
+# Deployment-specific notes. Not secrets, but there's no reason to publish
+# your project refs and domains to a public repo — it puts them on the
+# lists that bots scan for misconfigured databases.
+*.local.md
+
 # Python
 __pycache__/
 *.py[cod]

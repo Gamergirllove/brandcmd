@@ -16,10 +16,10 @@ hosting dashboards.
 
 | | Value |
 | --- | --- |
-| Supabase project ref | `vyljarqnjewwzngwfbzr` |
-| Supabase URL | `https://vyljarqnjewwzngwfbzr.supabase.co` |
-| Supabase auth callback | `https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback` |
-| Backend (production) | `https://brandcmd-backend.onrender.com` |
+| Supabase project ref | `<your-project-ref>` |
+| Supabase URL | `https://<your-project-ref>.supabase.co` |
+| Supabase auth callback | `https://<your-project-ref>.supabase.co/auth/v1/callback` |
+| Backend (production) | `https://<your-backend-domain>` |
 | Backend (local) | `http://localhost:8000` |
 | Frontend (local) | `http://localhost:3000` |
 
@@ -29,16 +29,16 @@ hosting dashboards.
 
 ```
 http://localhost:8000/connect/twitch/callback
-https://brandcmd-backend.onrender.com/connect/twitch/callback
-https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback
+https://<your-backend-domain>/connect/twitch/callback
+https://<your-project-ref>.supabase.co/auth/v1/callback
 ```
 
 **Google OAuth client** (console.cloud.google.com):
 
 ```
 http://localhost:8000/connect/youtube/callback
-https://brandcmd-backend.onrender.com/connect/youtube/callback
-https://vyljarqnjewwzngwfbzr.supabase.co/auth/v1/callback
+https://<your-backend-domain>/connect/youtube/callback
+https://<your-project-ref>.supabase.co/auth/v1/callback
 ```
 
 The third line in each is only needed for "Sign in with Twitch/Google" on
@@ -274,12 +274,12 @@ cp .env.example .env
 ```
 
 ```ini
-SUPABASE_URL=https://vyljarqnjewwzngwfbzr.supabase.co
+SUPABASE_URL=https://<your-project-ref>.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<service_role key from 1c>
 
 # Local dev. On Render set these to the deployed URLs instead:
 #   FRONTEND_URL=https://<your-netlify-site>.netlify.app
-#   BACKEND_URL=https://brandcmd-backend.onrender.com
+#   BACKEND_URL=https://<your-backend-domain>
 FRONTEND_URL=http://localhost:3000
 BACKEND_URL=http://localhost:8000
 
@@ -316,12 +316,12 @@ cp .env.local.example .env.local
 ```
 
 ```ini
-NEXT_PUBLIC_SUPABASE_URL=https://vyljarqnjewwzngwfbzr.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://<your-project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key from 1c>
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-Point `NEXT_PUBLIC_API_URL` at `https://brandcmd-backend.onrender.com` if you
+Point `NEXT_PUBLIC_API_URL` at `https://<your-backend-domain>` if you
 want the local frontend to talk to the deployed backend instead. If you do,
 the backend's `FRONTEND_URL` must include `http://localhost:3000` or CORS
 will block every request.

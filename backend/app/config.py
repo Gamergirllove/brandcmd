@@ -46,7 +46,11 @@ class Settings(BaseSettings):
 
     # App config
     frontend_url: str = Field(default="http://localhost:3000")
-    backend_url: str = Field(default="https://brandcmd-backend.onrender.com")
+    # Defaults to local. Production MUST set BACKEND_URL explicitly — OAuth
+    # callback URLs are built from it, and they have to match what is
+    # registered with each provider. A hardcoded production default here
+    # silently produces wrong callbacks on any other deployment.
+    backend_url: str = Field(default="http://localhost:8000")
     secret_key: str = Field(default="changeme")
     token_encryption_key: str = Field(default="")
 
